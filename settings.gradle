@@ -1,0 +1,3 @@
+include ':multiswipe'
+include ':demo'
+rootProject.name = "Multiswipe"
