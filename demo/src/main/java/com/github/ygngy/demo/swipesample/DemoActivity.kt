@@ -6,11 +6,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlin.random.Random
 
 
 class DemoActivity : AppCompatActivity() {
@@ -20,12 +23,14 @@ class DemoActivity : AppCompatActivity() {
     }
 
     private var isDetailActivity = false
+    private lateinit var fab: FloatingActionButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemsList: MutableList<ListItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_demo)
+        fab = findViewById(R.id.addFab)
         isDetailActivity = intent.getBooleanExtra(EXTRA_DETAIL_ACTIVITY, false)
         // having two sample lists each activity uses one of them
         itemsList = if (isDetailActivity) demoDetailList else demoList
@@ -44,6 +49,12 @@ class DemoActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun onAddClick(view: View){
+        val item = itemsList[Random.nextInt(itemsList.size)]
+        itemsList.add(item.copy(id = itemsList.size + 1))
+        recyclerView.adapter?.notifyItemInserted(itemsList.lastIndex)
     }
 
     private fun deleteItem(holder: RecyclerDemoAdapter.ViewHolder){
