@@ -4,4 +4,15 @@
     <string name="like_description">Like</string>
     <string name="copy_message">Copied to memory</string>
     <string name="add_fab_description">Add Item</string>
+
+    <string name="share_label">Share</string>
+    <string name="copy_label">Copy</string>
+    <string name="cut_label">Cut</string>
+    <string name="like_label">Like</string>
+    <string name="unlike_label">Unlike</string>
+    <string name="liked_label">Liked</string>
+    <string name="unliked_label">Unliked</string>
+    <string name="edit_label">Edit</string>
+    <string name="del_label">Delete</string>
+
 </resources>

@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2021 "Mohamadreza Amani Yeganegy"
+ * Licensed under the MIT license
+ *
+ * Email: ygnegy@gmail.com
+ * Github: https://github.com/ygngy
+ */
+
 package com.github.ygngy.demo.swipesample
 
 import android.content.ClipData
@@ -12,6 +20,9 @@ import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.ygngy.multiswipe.MultiSwipeListener
+import com.github.ygngy.multiswipe.SwipeDirection
+import com.github.ygngy.multiswipe.multiSwiping
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.random.Random
 
@@ -33,27 +44,50 @@ class DemoActivity : AppCompatActivity() {
         fab = findViewById(R.id.addFab)
         isDetailActivity = intent.getBooleanExtra(EXTRA_DETAIL_ACTIVITY, false)
         // having two sample lists each activity uses one of them
-        itemsList = if (isDetailActivity) demoDetailList else demoList
+        itemsList = (if (isDetailActivity) demoDetailList else demoList).toMutableList()
 
-        recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply{
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             layoutManager = LinearLayoutManager(this@DemoActivity)
             addItemDecoration(DividerItemDecoration(this@DemoActivity, DividerItemDecoration.VERTICAL))
-            adapter = RecyclerDemoAdapter(itemsList){
+            adapter = RecyclerDemoAdapter(itemsList) {
                 // starting another sample activity to compare swipe buttons order with current order
                 startActivity(
-                    Intent(this@DemoActivity,
-                            DemoActivity::class.java).apply{
-                        putExtra(EXTRA_DETAIL_ACTIVITY, !isDetailActivity)
-                    }
+                        Intent(this@DemoActivity,
+                                DemoActivity::class.java).apply {
+                            putExtra(EXTRA_DETAIL_ACTIVITY, !isDetailActivity)
+                        }
                 )
             }
         }
 
+        recyclerView.multiSwiping(listener = object : MultiSwipeListener {
+
+            override fun swiping(direction: SwipeDirection, swipeListSize: Int) {
+                // here i hide FAB when user is swiping actively
+                if (direction == SwipeDirection.END) fab.hide() else fab.show()
+            }
+
+            override fun onSwipeDone(swipeId: String, data: Any?) {
+                // holder has reacted to swipeDone event and has returned data
+                // to this method. I returned viewHolder itself from onSwipeDone at viewHolder
+                val holder = data as RecyclerDemoAdapter.ViewHolder
+                when (swipeId) {
+                    SwipeCreator.SWIPE_TO_SHARE_ID -> shareItem(holder)
+                    SwipeCreator.SWIPE_TO_COPY_ID -> copyItem(holder)
+                    SwipeCreator.SWIPE_TO_CUT_ID -> cutItem(holder)
+                    SwipeCreator.SWIPE_TO_LIKE_ID -> toggleLike(holder)
+                    SwipeCreator.SWIPE_TO_EDIT_ID -> editItem(holder)
+                    SwipeCreator.SWIPE_TO_DEL_ID -> deleteItem(holder)
+                }
+            }
+
+        })
     }
 
     fun onAddClick(view: View){
-        val item = itemsList[Random.nextInt(itemsList.size)]
-        itemsList.add(item.copy(id = itemsList.size + 1))
+        val list = if (isDetailActivity) demoDetailList else demoList
+        val item = list[Random.nextInt(list.size)]
+        itemsList.add(item.copy(id = list.size + 1))
         recyclerView.adapter?.notifyItemInserted(itemsList.lastIndex)
     }
 
@@ -62,11 +96,9 @@ class DemoActivity : AppCompatActivity() {
         recyclerView.adapter?.notifyItemRemoved(holder.adapterPosition)
     }
 
-    private fun toggleLike(holder: RecyclerDemoAdapter.ViewHolder){
-        if (holder.item != null) {
-            holder.item?.toggleLike()
-            recyclerView.adapter?.notifyItemChanged(holder.adapterPosition)
-        }
+    private fun toggleLike(holder: RecyclerDemoAdapter.ViewHolder) {
+        holder.item?.toggleLike()
+        recyclerView.adapter?.notifyItemChanged(holder.adapterPosition)
     }
 
     private fun shareItem(holder: RecyclerDemoAdapter.ViewHolder){

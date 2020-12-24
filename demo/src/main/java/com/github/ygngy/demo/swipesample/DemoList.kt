@@ -1,4 +1,8 @@
-﻿package com.github.ygngy.demo.swipesample
+﻿/**
+ * sample data for demo app
+ */
+
+package com.github.ygngy.demo.swipesample
 
 
 data class ListItem(val id: Int, var liked: Boolean, var data: String){
@@ -7,34 +11,46 @@ data class ListItem(val id: Int, var liked: Boolean, var data: String){
     }
 }
 
+const val TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE = "Two Left One Right Swipe"
+const val ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE = "One Left Two Right Swipe"
+const val NO_LEFT_SWIPE = "No Left Swipe"
+const val NO_RIGHT_SWIPE = "No Right Swipe"
+
 /**
  * a sample list about flowers for recycler view
  */
-val demoList = mutableListOf(
+val demoList = arrayOf(
         ListItem(1, true, "Rose"),
-        ListItem(2, false, "Lily"),
-        ListItem(3, false, "Tulip"),
-        ListItem(4, false, "Calla Lily"),
+        ListItem(2, false, "Sunflower"),
+        ListItem(3, false, "Moonflower"),
+        ListItem(4, false, "Gardenia"),
         ListItem(5, true, "Candytuft"),
         ListItem(6, false, "Orchid"),
-        ListItem(7, true, "Carnation"),
-        ListItem(8, false, "Hyacinth"),
+        ListItem(7, true, "Lily"),
+        ListItem(8, false, "Calla Lily"),
         ListItem(9, false, "Peruvian Lily"),
-        ListItem(10, false, "Chrysanthemum"),
+        ListItem(10, false, "Tulip"),
         ListItem(11, false, "Gladiolus"),
         ListItem(12, false, "Anemone"),
         ListItem(13, false, "Daffodil"),
-        ListItem(14, false, "Sunflower"),
-        ListItem(15, false, "Gardenia"),
+        ListItem(14, false, "Carnation"),
+        ListItem(15, false, "Hyacinth"),
         ListItem(16, false, "Gaura"),
         ListItem(14, false, "Gerbera"),
         ListItem(17, false, "Gaillardia"),
         ListItem(18, false, "Mandevilla"),
-        ListItem(19, false, "Moonflower")
+        ListItem(19, false, "Chrysanthemum"),
+        ListItem(20, false, TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE),
+        ListItem(21, false, ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE),
+        ListItem(22, false, NO_LEFT_SWIPE),
+        ListItem(23, false, NO_RIGHT_SWIPE)
 
 )
 
-val demoDetailList = mutableListOf(
+/**
+ * a sample list about flowers for recycler view
+ */
+val demoDetailList = arrayOf(
         ListItem(1, false, "A rose is a woody perennial flowering plant of the genus Rosa, in the family Rosaceae, or the flower it bears. There are over three hundred species and tens of thousands of cultivars. They form a group of plants that can be erect shrubs, climbing, or trailing, with stems that are often armed with sharp prickles. Flowers vary in size and shape and are usually large and showy, in colours ranging from white through yellows and reds. Most species are native to Asia, with smaller numbers native to Europe, North America, and northwestern Africa. Species, cultivars and hybrids are all widely grown for their beauty and often are fragrant. Roses have acquired cultural significance in many societies. Rose plants range in size from compact, miniature roses, to climbers that can reach seven meters in height. Different species hybridize easily, and this has been used in the development of the wide range of garden roses."),
         ListItem(2, true, "Dianthus caryophyllus is a herbaceous perennial plant growing up to 80 cm (31 1⁄2 in) tall. The leaves are glaucous greyish green to blue-green, slender, up to 15 cm (6 in) long. The flowers are produced singly or up to five together in a cyme; they are around 3–5 cm (1 1⁄4–2 in) diameter, and sweetly scented; the original natural flower color is bright pinkish-purple, but cultivars of other colors, including red, white, yellow, blue and green, along with some white with colored striped variations have been developed. The fragrant, hermaphrodite flowers have a radial symmetry. The four to six surrounding the calyx, egg-shaped, sting-pointed scales leaves are only ¼ as long as the calyx tube."),
         ListItem(3, true, "Tulips (Tulipa) form a genus of spring-blooming perennial herbaceous bulbiferous geophytes (having bulbs as storage organs). The flowers are usually large, showy and brightly colored, generally red, pink, yellow, or white (usually in warm colors). They often have a different colored blotch at the base of the tepals (petals and sepals, collectively), internally. Because of a degree of variability within the populations, and a long history of cultivation, classification has been complex and controversial. The tulip is a member of the lily family, Liliaceae, along with 14 other genera, where it is most closely related to Amana, Erythronium and Gagea in the tribe Lilieae. There are about 75 species, and these are divided among four subgenera. The name tulip is thought to be derived from a Persian word for turban, which it may have been thought to resemble. Tulips originally were found in a band stretching from Southern Europe to Central Asia, but since the seventeenth century have become widely naturalised and cultivated (see map). In their natural state they are adapted to steppes and mountainous areas with temperate climates. Flowering in the spring, they become dormant in the summer once the flowers and leaves die back, emerging above ground as a shoot from the underground bulb in early spring."),

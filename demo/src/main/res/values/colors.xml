@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="swipe_background">#036103</color>
+    <color name="swipe_accept_background">#BA0846</color>
+    <color name="swipe_text">#C5E1A5</color>
+    <color name="swipe_accept_text">#F48FB1</color>
+
+    <color name="view_background_color">#C8E6C9</color>
+    <color name="view_background_accept_color">#F8BBD0</color>
+
 </resources>
