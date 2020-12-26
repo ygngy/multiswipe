@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2021 "Mohamadreza Amani Yeganegy"
+ * Copyright (C) 2021 "Mohamadreza Amani Yeganegi"
  * Licensed under the MIT license
  *
  * Email: ygnegy@gmail.com
