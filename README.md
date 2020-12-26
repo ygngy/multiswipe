@@ -6,6 +6,7 @@ A multi swipe library for Android `RecyclerView`.
 
 - [Demo](#demo)
 - [Requirements](#requirements)
+- [Setup in Maven](#setup-in-maven)
 - [Setup in Gradle](#setup-in-gradle)
 - [Usage in Kotlin](#usage-in-kotlin)
 - [Credits](#credits)
@@ -26,6 +27,29 @@ Here **half** of the view could be any fraction that the developer chooses.*
 
 The library requires Android **API level 16+**.
 
+## Setup in Maven
+
+1. Add the JitPack repository to your build file:
+
+    ```maven
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    ```
+
+2. Add the dependency:
+
+    ```maven
+    <dependency>
+        <groupId>com.github.ygngy</groupId>
+        <artifactId>multiswipe</artifactId>
+        <version>1.0</version>
+    </dependency>
+    ```
+
 ## Setup in Gradle
 
 1. Add it in project's root `build.gradle` at the end of repositories:
@@ -39,7 +63,7 @@ The library requires Android **API level 16+**.
     }
     ```
 
-2. Add the dependency to app's `build.gradle`
+2. Add the dependency to app's `build.gradle`:
 
     ```groovy
     dependencies {
