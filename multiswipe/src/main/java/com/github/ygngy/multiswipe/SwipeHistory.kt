@@ -9,7 +9,7 @@
 package com.github.ygngy.multiswipe
 
 /**
- * Base class to save last used swipe id
+ * Base class to save last used swipe's id.
  */
 sealed class SwipeHistory {
     /**
@@ -22,13 +22,13 @@ sealed class SwipeHistory {
         }
 
     /**
-     * History from Opposite (facing) side of current side
+     * History from Opposite (facing) side of current side.
      */
     abstract val opposite: SwipeHistory
 }
 
 /**
- * Object used to save last used swipe id in left side of list row
+ * Object used to save last used swipe id in left side of row.
  */
 object LeftSwipeHistory: SwipeHistory() {
     override val opposite: SwipeHistory
@@ -36,7 +36,7 @@ object LeftSwipeHistory: SwipeHistory() {
 }
 
 /**
- * Object used to save last used swipe id in right side of list row
+ * Object used to save last used swipe id in right side of row.
  */
 object RightSwipeHistory: SwipeHistory() {
     override val opposite: SwipeHistory

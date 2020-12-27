@@ -12,19 +12,22 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 
 /**
- * Represents each icon and text on [backgroundColor]
- * below each recyclerView row.
+ * Represents icons and text on [backgroundColor]
+ * below each [RecyclerView][androidx.recyclerview.widget.RecyclerView] row.
  *
- * [icon] swipe's icon and margin between icons.
- *
+ * @constructor [backgroundColor] will be drawn fully below icons and texts
+ * and rows of recyclerView. But [viewColor] is used to draw a background
+ * below swiped view and **above** [label], [icon] and [backgroundColor].
+ * [viewColor] will be hidden below view's background if view has a background.
+ * [icon] contains swipe's icon and margin between icons.
  * [label] is used to clarifying the icon action better.
- * [label] will be drawn only if there is enough height
+ *
+ * @property icon Swipe's icon and margin between icons.
+ * @property label Used to clarify the icon's action better.
+ * [label] Will be drawn only if there is enough height
  * to draw text based on [SwipeLabel.textSize].
- *
- * [backgroundColor] must be the color's code.
- * This color will be drawn fully below icons and texts and rows of recyclerView.
- *
- * [viewColor] color value used to draw a background
+ * @property backgroundColor Wll be drawn fully below icons and texts and rows of recyclerView.
+ * @property viewColor Used to draw a background
  * below swiped view and **above** [label], [icon] and [backgroundColor].
  * It will be hidden below view's background if view has a background.
  */
@@ -35,7 +38,10 @@ data class SwipeTheme
                           val viewColor: Int = Color.TRANSPARENT){
 
     /**
-     * [position] position of margin: 0 for edge, 1 for main icon, 2 for other icons
+     * @param position position of margin:
+     * **0** for edge (margin between edge and first icon),
+     * **1** for main icon (margin between first and second icon) and
+     * **2** for other icons (margin between other icons)
      *
      * @return Horizontal margin for each position
      */
@@ -50,14 +56,11 @@ data class SwipeTheme
 /**
  * This class is used to clarifying the icon's action better.
  *
- * [text] is label's text.
- *
- * [textColor] is color of [text]
- *
- * [textSize] is size of [text]
- *
- * [margin] horizontal margin between text and last icon
- * when this label is shown.
+ * @property text Text of [SwipeLabel].
+ * @property textColor Color of [text] in [SwipeLabel].
+ * @property textSize Size of [text] in [SwipeLabel].
+ * @property margin Horizontal margin between text and last icon
+ * when this [SwipeLabel] is shown.
  */
 data class SwipeLabel(val text: String,
                       val textColor: Int,
@@ -74,15 +77,17 @@ data class SwipeLabel(val text: String,
 }
 
 /**
- * [SwipeIcon] is used for [SwipeTheme].
+ * [SwipeIcon] Is used for [SwipeTheme].
  *
- * [drawable] Drawable will be drawn as swipe icon.
- *
+ * @constructor [drawable] Drawable will be drawn as swipe icon.
  * [edgeHorMargin] Horizontal margin between first icon and edge of view.
- *
  * [iconHorMargin] Horizontal margin between first icon and second icon (if there is second icon).
- *
  * [tailHorMargin] Horizontal margin between inactive icons (if there is more than one inactive icon)
+ *
+ * @property drawable Drawable will be drawn as swipe icon.
+ * @property edgeHorMargin Horizontal margin between first icon and edge of view.
+ * @property iconHorMargin Horizontal margin between first icon and second icon (if there is second icon).
+ * @property tailHorMargin Horizontal margin between inactive icons (if there is more than one inactive icon)
  */
 data class SwipeIcon(val drawable: Drawable,
                      val edgeHorMargin: Float,
@@ -90,19 +95,19 @@ data class SwipeIcon(val drawable: Drawable,
                      val tailHorMargin: Float)
 
 /**
- * [Swipe] is used to draw each swipe on screen based on its state:
- * 
- * [id] is used to notify client which swipe is triggered and to remember last triggered swipe.
+ * [Swipe] Is used to draw each swipe on screen based on its state.
  *
- * [activeTheme]: Swipe theme used when this swipe is active but is not accept
- * (user has not swiped enough to trigger swipe's action).
- *
- * [acceptTheme]: The Swipe theme used when
- * the user has swiped enough to trigger swipe's action.
- *
- * [inactiveIcon]: The icon used to draw currently inactive icons (another swipe is active).
- *
+ * @constructor [id] is used to identify this specific swipe.
+ * [activeTheme] is used when this swipe is active.
+ * [acceptTheme] is used when the user has moved enough to trigger swipe's action.
+ * [inactiveIcon] is to draw currently inactive icons (another swipe is active).
  * **Note**: If [acceptTheme] and/or [inactiveIcon] is null they will be same as [activeTheme].
+ *
+ * @property id Used to notify listeners which swipe is triggered and to remember last triggered swipe.
+ * @property activeTheme Swipe theme used when this swipe is active but is not accept
+ * (user has not moved enough to trigger swipe's action).
+ * @property acceptTheme The Swipe theme used when the user has moved enough to trigger swipe's action.
+ * @property inactiveIcon Drawable used to draw currently inactive icons (another swipe is active).
  */
 data class Swipe @JvmOverloads constructor(val id: String,
                  val activeTheme: SwipeTheme,
@@ -111,6 +116,8 @@ data class Swipe @JvmOverloads constructor(val id: String,
 
     /**
      * Returns correct theme for active or accept swipes.
+     *
+     * @param isAccepted Must be true if this swipe is in accept state.
      *
      * @return [acceptTheme] if [acceptTheme] is not null
      * and [isAccepted] is true otherwise returns [activeTheme]

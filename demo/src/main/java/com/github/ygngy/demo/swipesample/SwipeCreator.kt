@@ -19,6 +19,13 @@ import com.github.ygngy.multiswipe.SwipeIcon
 import com.github.ygngy.multiswipe.SwipeLabel
 import com.github.ygngy.multiswipe.SwipeTheme
 
+/**
+ * A sample class used to create different swipes.
+ *
+ * @constructor
+ * @param context Used to get resources from.
+ * @param liked Used to select icon and label for [likeSwipe] theme.
+ */
 class SwipeCreator(private val context: Context, liked: Boolean) {
 
     companion object{
@@ -158,21 +165,45 @@ class SwipeCreator(private val context: Context, liked: Boolean) {
 
     }
 
+    /**
+     * A sample method used to prevent code repeat when creating [SwipeTheme].
+     *
+     * @receiver [SwipeTheme] To extend and change its icon and text.
+     * @param drawableRes Drawable resource id of icon in [SwipeTheme].
+     * @param stringRes String resource id of label in [SwipeTheme].
+     */
     private fun SwipeTheme.extend(@DrawableRes drawableRes: Int,
                                   @StringRes stringRes: Int): SwipeTheme = copy(
                     icon = icon.copy(drawable = getDrawable(drawableRes)!!),
                     label = label?.copy(text = getString(stringRes))
             )
 
+    /**
+     * This method is used to shorten [ContextCompat.getDrawable]
+     * because it will be used a lot here.
+     */
     private fun getDrawable(@DrawableRes drawableRes: Int) =
             ContextCompat.getDrawable(context, drawableRes)
 
+    /**
+     * This method is used to shorten [ContextCompat.getColor]
+     * because it will be used a lot here.
+     */
     private fun getColor(@ColorRes colorRes: Int) =
             ContextCompat.getColor(context, colorRes)
 
+    /**
+     * This method is used to shorten [Context.getString]
+     * because it will be used a lot here.
+     */
     private fun getString(@StringRes stringRes: Int) =
             context.getString(stringRes)
 
+    /**
+     * This method is used to shorten
+     * [context.resources.getDimension][android.content.res.Resources.getDimension]
+     * because it will be used a lot here.
+     */
     private fun getDimension(@DimenRes dimenRes: Int) =
             context.resources.getDimension(dimenRes)
 }

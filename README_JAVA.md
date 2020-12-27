@@ -46,7 +46,7 @@ The library requires Android **API level 16+**.
     <dependency>
         <groupId>com.github.ygngy</groupId>
         <artifactId>multiswipe</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
     </dependency>
     ```
 
@@ -63,11 +63,11 @@ The library requires Android **API level 16+**.
     }
     ```
 
-2. Add the dependency to app's `build.gradle`
+2. Add the dependency to app's `build.gradle`:
 
     ```groovy
     dependencies {
-        implementation 'com.github.ygngy:multiswipe:1.0'
+        implementation 'com.github.ygngy:multiswipe:1.0.1'
     }
     ```
 
@@ -169,13 +169,13 @@ public RightSwipeList getRightSwipeList() {
 }
 ```
 
-### At `onSwipeDone` of `ViewHolder` react to swipes
+### At `onSwipeDone` of `ViewHolder` handle swipe event
 
 ```java
 @Nullable
 @Override
 public Object onSwipeDone(@NotNull String swipeId) {
-    // Here react to swipe and return some data to MultiSwipeListener
+    // Here handle swipe event and return some data to MultiSwipeListener
     // Instead you may choose to only return data
     // from this method to consume event at Activity or Fragment
     switch (swipeId) {

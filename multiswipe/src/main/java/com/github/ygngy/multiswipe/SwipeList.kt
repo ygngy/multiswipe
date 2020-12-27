@@ -8,6 +8,13 @@
 
 package com.github.ygngy.multiswipe
 
+/**
+ * Base class of [LeftSwipeList] and [RightSwipeList]
+ *
+ * @constructor Default constructor used to initialize [SwipeList].
+ * @param history History used to save last swipe id.
+ * @param list Swipe list to use.
+ */
 sealed class SwipeList(private val history: SwipeHistory,
                      private vararg val list: Swipe): Iterator<Swipe> {
 
@@ -51,9 +58,9 @@ sealed class SwipeList(private val history: SwipeHistory,
 
     /**
      * Finds next Swipe and resets iteration
-     * Must be called when user starts to swipe
+     * must be called when user starts to swipe.
      *
-     * @return this object
+     * @return This object.
      */
     fun prepare(): SwipeList {
         if (isNotEmpty) {
@@ -69,12 +76,12 @@ sealed class SwipeList(private val history: SwipeHistory,
 
     /**
      * Shifts from current swipe to next swipe
-     * and resets iteration
+     * and resets iteration.
      *
-     * Must be called when user release finger before swiping enough to
-     * trigger swipes action (when user cancels swipe).
+     * Must be called when user releases finger before a complete swipe
+     * (when user cancels swipe).
      *
-     * @return this object
+     * @return This object.
      */
     fun shift(): SwipeList {
         prepare()
@@ -98,16 +105,22 @@ sealed class SwipeList(private val history: SwipeHistory,
 }
 
 /**
- * Swipes for left side of rows of recycler view.
+ * Swipes for left side of rows of RecyclerView.
  * Swipes argument order is the order of swipes.
  * First argument will be first and active swipe
  * if there is no swipe at history.
+ *
+ * @constructor Default constructor used to initialize [LeftSwipeList].
+ * @param swipes Swipes for left side of rows in RecyclerView.
  */
 class LeftSwipeList(vararg swipes: Swipe): SwipeList(LeftSwipeHistory, *swipes)
 /**
- * Swipes for right side of rows of recycler view.
+ * Swipes for right side of rows of RecyclerView.
  * Swipes argument order is the order of swipes.
  * First argument will be first and active swipe
  * if there is no swipe at history.
+ *
+ * @constructor Default constructor used to initialize [RightSwipeList].
+ * @param swipes Swipes for right side of rows in RecyclerView.
  */
 class RightSwipeList(vararg swipes: Swipe): SwipeList(RightSwipeHistory, *swipes)

@@ -4,20 +4,23 @@
 
 package com.github.ygngy.demo.swipesample
 
-
+/**
+ * ListItem class used in demo lists.
+ */
 data class ListItem(val id: Int, var liked: Boolean, var data: String){
     fun toggleLike(){
         liked = !liked
     }
 }
 
+// Titles used to test different number of swipes in rows.
 const val TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE = "Two Left One Right Swipe"
 const val ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE = "One Left Two Right Swipe"
 const val NO_LEFT_SWIPE = "No Left Swipe"
 const val NO_RIGHT_SWIPE = "No Right Swipe"
 
 /**
- * a sample list about flowers for recycler view
+ * A sample list about flowers for recycler view
  */
 val demoList = arrayOf(
         ListItem(1, true, "Rose"),
@@ -48,7 +51,7 @@ val demoList = arrayOf(
 )
 
 /**
- * a sample list about flowers for recycler view
+ * A sample list about flowers for recycler view.
  */
 val demoDetailList = arrayOf(
         ListItem(1, false, "A rose is a woody perennial flowering plant of the genus Rosa, in the family Rosaceae, or the flower it bears. There are over three hundred species and tens of thousands of cultivars. They form a group of plants that can be erect shrubs, climbing, or trailing, with stems that are often armed with sharp prickles. Flowers vary in size and shape and are usually large and showy, in colours ranging from white through yellows and reds. Most species are native to Asia, with smaller numbers native to Europe, North America, and northwestern Africa. Species, cultivars and hybrids are all widely grown for their beauty and often are fragrant. Roses have acquired cultural significance in many societies. Rose plants range in size from compact, miniature roses, to climbers that can reach seven meters in height. Different species hybridize easily, and this has been used in the development of the wide range of garden roses."),

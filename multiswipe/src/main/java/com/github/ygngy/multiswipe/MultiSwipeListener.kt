@@ -9,47 +9,52 @@
 package com.github.ygngy.multiswipe
 
 /**
- * Used to notify direction of Swipe
+ * Used to define the layout side of the row where swipe was started from.
  *
- * [START] swipe is from view's layout start side
+ * [START] Swipe is started from view's start side.
  *
- * [END] swipe is from view's layout end side
+ * [END] Swipe is started from view's end side.
  *
- * [NONE] there is no swipe
+ * [NONE] Swipe is closing or there is no swipe.
  */
 enum class SwipeDirection {
     /**
-     * [START] swipe is from view's layout start side
+     * Swipe is started from view's start side.
      */
     START,
 
     /**
-     * [END] swipe is from view's layout end side
+     * Swipe is started from view's end side.
      */
     END,
 
     /**
-     * [NONE] there is no swipe
+     * Swipe is closing or there is no swipe.
      */
     NONE
 }
 
+/**
+ * Used to listen to swipe events.
+ */
 interface MultiSwipeListener {
 
     /**
-     * This method could be used to clear on screen widgets such as FABs
-     * while swiping
+     * This method could be used to clear on screen widgets such as FABs while swiping.
      * This method may be called a lot in each swipe cause of [direction] change.
-     * [direction] is row's layout side of swipe's edge or [SwipeDirection.NONE] if no swipe is active.
      *
-     * [swipeListSize] is number of swipes in current direction
+     * @param direction Layout side ([START][SwipeDirection.START]/[END][SwipeDirection.END])
+     * of the row where swipe was started from or [NONE][SwipeDirection.NONE]
+     * if swipe is closing or no swipe is active.
+     * @param swipeListSize Number of swipes in current direction.
      */
     fun swiping(direction: SwipeDirection, swipeListSize: Int)
 
     /**
      * This method will be called when user swipes enough to triggers swipe's action.
-     * [swipeId] is the id of the swiped [Swipe]
-     * [data] is data returned from [MultiSwipe.onSwipeDone] (from ViewHolder.onSwipeDone)
+     *
+     * @param swipeId The id of the [Swipe].
+     * @param data Data returned from [MultiSwipe.onSwipeDone] (from ViewHolder.onSwipeDone).
      */
     fun onSwipeDone(swipeId: String, data: Any?)
 

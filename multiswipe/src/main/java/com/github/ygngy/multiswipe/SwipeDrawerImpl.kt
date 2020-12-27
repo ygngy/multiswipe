@@ -24,18 +24,18 @@ import kotlin.math.min
  */
 open class SwipeDrawerImpl: SwipeDrawer {
 
-    // paint used to draw swipe background
+    // Paint used to draw swipe background
     private val bkgPaint = Paint().apply {
         style = Paint.Style.FILL
     }
 
-    // used to draw swipe labels
+    // TextPaint used to draw swipe labels
     private val txtPaint = TextPaint().apply {
         isAntiAlias = true
         textAlign = Paint.Align.LEFT
     }
 
-    //used to calculate text height
+    // Used to calculate text height
     private val textBounds = Rect()
 
     private lateinit var canvas: Canvas

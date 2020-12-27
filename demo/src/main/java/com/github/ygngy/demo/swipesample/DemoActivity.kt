@@ -26,7 +26,9 @@ import com.github.ygngy.multiswipe.multiSwiping
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlin.random.Random
 
-
+/**
+ * Demo Activity used to show MultiSwipe library in action.
+ */
 class DemoActivity : AppCompatActivity() {
 
     companion object{

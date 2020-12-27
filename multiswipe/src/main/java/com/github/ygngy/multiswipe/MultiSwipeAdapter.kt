@@ -23,22 +23,18 @@ import kotlin.math.abs
  * Shorthand function that could be used to attach [MultiSwipeAdapter]
  * to [RecyclerView]
  *
- * [listener] is an optional listener to get events about swipes.
- *
- * [supportsRtl] if is true and layout direction is RTL
- * left swipe list will be drawn at right side and right list at left side of each row
+ * @param listener An optional listener to get events about swipes.
+ * @param supportsRtl If is true and layout direction is RTL
+ * left swipe list will be used at right side and right list at left side of each row
  * (default value: false).
- *
- * [hideInactiveIcons] if true when swipe is in accept state
+ * @param hideInactiveIcons If true when swipe is in accepting state
  * inactive icons will be hidden (default value: true).
- *
- * [swipeThreshold] the fraction that the user should move the View to be considered as swiped.
- * The fraction is calculated with respect to RecyclerView's bounds.
+ * @param swipeThreshold The fraction that the user should move the View to be considered as swiped.
+ * The fraction is calculated with respect to View's bounds.
  * Default value is .5f, which means, to swipe a View, user must move the View
- * at least half of RecyclerView's width. This value mus be between 0 and 1
+ * at least half of View's width. This value mus be between 0 and 1
  * (default value: .5F).
- *
- * [drawer] is used to draw backgrounds, icons and labels for swipes.
+ * @param drawer Used to draw backgrounds, icons and labels for swipes.
  * To change draws use a custom subclass of [SwipeDrawerImpl] or implementation of [SwipeDrawer].
  */
 @JvmOverloads
@@ -60,24 +56,21 @@ fun RecyclerView.multiSwiping(
 /**
  * This class could be attached to [RecyclerView] using [ItemTouchHelper]:
  *
- * ItemTouchHelper(MultiSwipeAdapter()).attachToRecyclerView(recyclerView)
+ * ItemTouchHelper(MultiSwipeAdapter(...)).attachToRecyclerView(recyclerView)
  *
- * [listener] is an optional listener to get events about swipes.
- *
- * [supportsRtl] if is true and layout direction is RTL
- * left swipe list will be drawn at right side and right list at left side of each row
+ * @constructor Default constructor to instantiate [MultiSwipeAdapter].
+ * @param listener An optional listener to get events about swipes.
+ * @param supportsRtl If is true and layout direction is RTL
+ * left swipe list will be used at right side and right list at left side of each row
  * (default value: false).
- *
- * [hideInactiveIcons] if true when swipe is in accept state inactive icons will be hidden
+ * @param hideInactiveIcons If true when swipe is in accepting state inactive icons will be hidden
  * (default value: true).
- *
- * [swipeThreshold] the fraction that the user should move the View to be considered as swiped.
- * The fraction is calculated with respect to RecyclerView's bounds.
+ * @param swipeThreshold The fraction that the user should move the View to be considered as swiped.
+ * The fraction is calculated with respect to View's bounds.
  * Default value is .5f, which means, to swipe a View, user must move the View
- * at least half of RecyclerView's width. This value mus be between 0 and 1
+ * at least half of View's width. This value mus be between 0 and 1
  * (default value: .5F).
- *
- * [drawer] is used to draw backgrounds, icons and labels for swipes.
+ * @param drawer Used to draw backgrounds, icons and labels for swipes.
  * To change draws use a custom subclass of [SwipeDrawerImpl] or implementation of [SwipeDrawer].
  */
 @SuppressLint("ClickableViewAccessibility")

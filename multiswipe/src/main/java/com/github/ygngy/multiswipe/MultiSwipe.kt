@@ -10,23 +10,29 @@ package com.github.ygngy.multiswipe
 
 /**
  * To represent swipes in correct order for left and right layout sides
- * ViewHolder must implement this interface
+ * and to handle swipes
+ * [ViewHolder][androidx.recyclerview.widget.RecyclerView.ViewHolder]
+ * must implements this interface.
  */
 interface MultiSwipe {
     /**
+     * Returns ordered swipes for left side of View.
+     *
      * **Caution**: Prevent creating objects in this method
      * because this method may be called a lot.
      *
-     * @return ordered swipes. First swipe must be in first position
+     * @return Ordered swipes. First swipe must be in first position
      * for left side of view.
      */
     val leftSwipeList: LeftSwipeList?
 
     /**
+     * Returns ordered swipes for right side of View.
+     *
      * **Caution**: Prevent creating objects in this method
      * because this method may be called a lot.
      *
-     * @return ordered swipes. First swipe must be in first position
+     * @return Ordered swipes. First swipe must be in first position
      * for right side of view.
      */
     val rightSwipeList: RightSwipeList?
@@ -34,15 +40,15 @@ interface MultiSwipe {
 
 
     /**
-     * This method will be called when user swipes enough to triggers swipe's action.
-     * [swipeId] is the id of swiped [Swipe].
+     * This method will be called when user moves enough to triggers swipe's action.
      *
-     * ViewHolder can react here to swipes and/or return any data
-     * to use for further reaction to swipes at [MultiSwipeListener]
+     * [ViewHolder][androidx.recyclerview.widget.RecyclerView.ViewHolder]
+     * can handle swipes here and/or return any data
+     * to use for further handling at [MultiSwipeListener].
      *
-     * @return any data that will be sent
-     * to [MultiSwipeListener.onSwipeDone] at [MultiSwipeAdapter].
-     *
+     * @param swipeId The id of the [Swipe].
+     * @return Any data that will be sent
+     * to [MultiSwipeListener.onSwipeDone].
      * Returned data may be used at Fragment or Activity level.
      */
     fun onSwipeDone(swipeId: String): Any?

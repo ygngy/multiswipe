@@ -17,7 +17,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ygngy.multiswipe.*
 
-
+/**
+ * A sample [RecyclerView] adapter used to show demo lists.
+ */
 class RecyclerDemoAdapter(private val dataSet: List<ListItem>
         , private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RecyclerDemoAdapter.ViewHolder>(){
@@ -30,11 +32,13 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
         private val context = view.context
         private val textView: TextView = view.findViewById(R.id.title)
         private val imageView: ImageView = view.findViewById(R.id.like)
+
         // Hold left and right swipe lists and reuse them
         // Prevent recreating them when there is no need to create it
         // Only recreate swipe lists when you need to change a swipe
         private var mLeftSwipeList: LeftSwipeList? = null
         private var mRightSwipeList: RightSwipeList? = null
+
         var item: ListItem? = null
             private set
 
@@ -80,13 +84,15 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
             }
         }
 
+        // This will be called a lot so do NOT create any object here.
         override val leftSwipeList: LeftSwipeList?
             get() = mLeftSwipeList
 
+        // This will be called a lot so do NOT create any object here.
         override val rightSwipeList: RightSwipeList?
             get() = mRightSwipeList
 
-        // Here i can react to swipe click and return some
+        // Here i can handle swipe and return some
         // data to main MultiSwipeListener (if there is one)
         // for this demo i simply return this viewHolder
         // to MultiSwipeListener
