@@ -54,7 +54,8 @@ data class SwipeTheme
 
 
 /**
- * This class is used to clarifying the icon's action better.
+ * Represents swipe text, text color, text size and text margin.
+ * This class is used to clarifying the icon's action better and is used for [SwipeTheme].
  *
  * @property text Text of [SwipeLabel].
  * @property textColor Color of [text] in [SwipeLabel].
@@ -77,7 +78,7 @@ data class SwipeLabel(val text: String,
 }
 
 /**
- * [SwipeIcon] Is used for [SwipeTheme].
+ * Represents swipe icon and margins for icons and is used for [SwipeTheme].
  *
  * @constructor [drawable] Drawable will be drawn as swipe icon.
  * [edgeHorMargin] Horizontal margin between first icon and edge of view.
@@ -95,7 +96,8 @@ data class SwipeIcon(val drawable: Drawable,
                      val tailHorMargin: Float)
 
 /**
- * [Swipe] Is used to draw each swipe on screen based on its state.
+ * Is used to draw each swipe on screen based on its state.
+ * Represents swipe id, themes and icons.
  *
  * @constructor [id] is used to identify this specific swipe.
  * [activeTheme] is used when this swipe is active.
