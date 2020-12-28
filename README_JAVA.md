@@ -1,6 +1,6 @@
 # Multiswipe
 
-A multi swipe library for Android `RecyclerView`.
+A swipe library for RecyclerView in Android.
 
 ## Table of Contents (Java) [Kotlin](README.md)
 
