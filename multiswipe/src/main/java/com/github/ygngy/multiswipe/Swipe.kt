@@ -10,6 +10,7 @@ package com.github.ygngy.multiswipe
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import com.github.ygngy.multiswipe.SwipeHistory.Companion.isValidSwipeId
 
 /**
  * Represents icons and text on [backgroundColor]
@@ -100,21 +101,32 @@ data class SwipeIcon(val drawable: Drawable,
  * Represents swipe id, themes and icons.
  *
  * @constructor [id] is used to identify this specific swipe.
+ * **[id] Must be greater than zero or [IllegalArgumentException] will be thrown.**
  * [activeTheme] is used when this swipe is active.
  * [acceptTheme] is used when the user has moved enough to trigger swipe's action.
- * [inactiveIcon] is to draw currently inactive icons (another swipe is active).
+ * [inactiveIcon] is used to draw this swipe when this swipe is inactive.
  * **Note**: If [acceptTheme] and/or [inactiveIcon] is null they will be same as [activeTheme].
  *
  * @property id Used to notify listeners which swipe is triggered and to remember last triggered swipe.
+ * **[id] Must be greater than zero or [IllegalArgumentException] will be thrown**.
  * @property activeTheme Swipe theme used when this swipe is active but is not accept
  * (user has not moved enough to trigger swipe's action).
  * @property acceptTheme The Swipe theme used when the user has moved enough to trigger swipe's action.
- * @property inactiveIcon Drawable used to draw currently inactive icons (another swipe is active).
+ * @property inactiveIcon Used to draw this swipe when this swipe is inactive.
+ * **Note:** In each user move only one swipe is active (or accept) and other swipes are inactive
+ * from inactive swipes only [inactiveIcon] will be drawn on active (or accept) theme of active (or accept) swipe.
  */
-data class Swipe @JvmOverloads constructor(val id: String,
+data class Swipe @JvmOverloads constructor(
+                 val id: Int,
                  val activeTheme: SwipeTheme,
                  val acceptTheme: SwipeTheme? = null,
                  val inactiveIcon: Drawable? = null) {
+
+    init {
+        // In this library negative or zero ids for swipes is reserved as no id in swipe history.
+        if (!isValidSwipeId(id))
+            throw IllegalArgumentException("The swipe id: $id is Invalid. It must be greater than zero.")
+    }
 
     /**
      * Returns correct theme for active or accept swipes.

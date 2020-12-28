@@ -62,14 +62,14 @@ class DemoActivity : AppCompatActivity() {
             }
         }
 
-        recyclerView.multiSwiping(listener = object : MultiSwipeListener {
+        recyclerView.multiSwiping(object : MultiSwipeListener {
 
             override fun swiping(direction: SwipeDirection, swipeListSize: Int) {
                 // here i hide FAB when user is swiping actively
                 if (direction == SwipeDirection.END) fab.hide() else fab.show()
             }
 
-            override fun onSwipeDone(swipeId: String, data: Any?) {
+            override fun onSwipeDone(swipeId: Int, data: Any?) {
                 // holder has reacted to swipeDone event and has returned data
                 // to this method. I returned viewHolder itself from onSwipeDone at viewHolder
                 val holder = data as RecyclerDemoAdapter.ViewHolder

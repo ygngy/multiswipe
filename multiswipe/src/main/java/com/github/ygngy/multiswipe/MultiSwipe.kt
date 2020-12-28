@@ -9,7 +9,7 @@
 package com.github.ygngy.multiswipe
 
 /**
- * To represent swipes in correct order for left and right layout sides
+ * To represent swipes in correct order for left and right sides of view
  * and to handle swipes
  * [ViewHolder][androidx.recyclerview.widget.RecyclerView.ViewHolder]
  * must implements this interface.
@@ -47,11 +47,10 @@ interface MultiSwipe {
      * to use for further handling at [MultiSwipeListener].
      *
      * @param swipeId The id of the [Swipe].
-     * @return Any data that will be sent
+     * @return Any optional data that will be sent
      * to [MultiSwipeListener.onSwipeDone].
-     * Returned data may be used at Fragment or Activity level.
      */
-    fun onSwipeDone(swipeId: String): Any?
+    fun onSwipeDone(swipeId: Int): Any?
 
 
 }

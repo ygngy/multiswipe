@@ -46,7 +46,7 @@ The library requires Android **API level 16+**.
     <dependency>
         <groupId>com.github.ygngy</groupId>
         <artifactId>multiswipe</artifactId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
     </dependency>
     ```
 
@@ -67,7 +67,7 @@ The library requires Android **API level 16+**.
 
     ```groovy
     dependencies {
-        implementation 'com.github.ygngy:multiswipe:1.0.2'
+        implementation 'com.github.ygngy:multiswipe:1.1.0'
     }
     ```
 
@@ -79,7 +79,7 @@ The library requires Android **API level 16+**.
 interface MultiSwipe {
     val leftSwipeList: LeftSwipeList?
     val rightSwipeList: RightSwipeList?
-    fun onSwipeDone(swipeId: String): Any?
+    fun onSwipeDone(swipeId: Int): Any?
 }
 ```
 
@@ -147,7 +147,7 @@ override val rightSwipeList: RightSwipeList?
 
 ```kotlin
 // Here handle swipe event and return some data to MultiSwipeListener 
-override fun onSwipeDone(swipeId: String): Any? {
+override fun onSwipeDone(swipeId: Int): Any? {
     // Instead you may choose to only return data 
     // from this method to consume event at Activity or Fragment
     when(swipeId) {
@@ -166,17 +166,14 @@ override fun onSwipeDone(swipeId: String): Any? {
 ### At `Activity` or `Fragment` attach `MultiSwipeAdapter` to `RecyclerView`
 
 ```kotlin
-recyclerView.multiSwiping(supportsRtl = true, // Switches leftSwipeList with rightSwipeList for RTL
-                          hideInactiveIcons = true, // hides inactive icons when accepting swipe
-                          swipeThreshold = .5F ,// The fraction of the View to be considered as accepted swiped
-                          listener = object: MultiSwipeListener { // optional listener
+recyclerView.multiSwiping(object: MultiSwipeListener { // optional listener
 
                 // This method is called after onSwipeDone of ViewHolder
                 // and data is the returned value of onSwipeDone of ViewHolder
-                override fun onSwipeDone(swipeId: String, data: Any?) {
+                override fun onSwipeDone(swipeId: Int, data: Any?) {
                     // data is the return value of "ViewHolder.onSwipeDone"
                     // cast to data you returned from "ViewHolder.onSwipeDone"
-                    val myData = data as MyData
+                    val myData = data as MyData?
                     when(swipeId) {
                         SWIPE_TO_SHARE_ID -> shareItem(myData)
                         SWIPE_TO_COPY_ID -> copyItem(myData)

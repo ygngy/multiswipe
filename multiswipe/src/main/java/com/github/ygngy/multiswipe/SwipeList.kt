@@ -8,6 +8,8 @@
 
 package com.github.ygngy.multiswipe
 
+import com.github.ygngy.multiswipe.SwipeHistory.Companion.isValidSwipeId
+
 /**
  * Base class of [LeftSwipeList] and [RightSwipeList]
  *
@@ -33,9 +35,11 @@ sealed class SwipeList(private val history: SwipeHistory,
      * (and that swipe is presented in the current list)
      * it will be active swipe ignoring current list order. To change
      * history of active swipe use this method.
+     *
+     * @param swipeId Must be positive.
      * @return true if history changed.
      */
-    fun changeHistory(swipeId: String): Boolean{
+    fun changeHistory(swipeId: Int): Boolean{
         val oldHistory = history.id
         history.id = swipeId
         return oldHistory != history.id
@@ -45,8 +49,8 @@ sealed class SwipeList(private val history: SwipeHistory,
      * Initializes head index based on [id]
      * @return true if head changed
      */
-    private fun setAsHead(id: String?): Boolean {
-        if (id != null)
+    private fun setAsHead(id: Int): Boolean {
+        if (isValidSwipeId(id))
             list.forEachIndexed { i, swp ->
                 if (swp.id == id) {
                     head = i

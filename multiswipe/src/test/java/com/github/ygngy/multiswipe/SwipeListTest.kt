@@ -18,11 +18,17 @@ class SwipeListTest {
     // but here for testing i am using a fake drawable
     private val drawable = ColorDrawable(Color.TRANSPARENT)
 
-    private fun mockSwipe(id: String) =
+    private fun mockSwipe(id: Int) =
         Swipe(id, SwipeTheme(SwipeIcon(drawable, 16f,8f,4f)))
 
     @Test
     fun shiftTest() {
+
+        val shareId = 1
+        val copyId = 2
+        val cutId = 3
+        val editId = 4
+
         fun getOrderIndex( repeat: Int, index: Int): Int{
             val indices = arrayOf(
                 arrayOf(0, 1, 2, 3),
@@ -32,14 +38,14 @@ class SwipeListTest {
             )
             return indices[repeat % 4][index]
         }
-        val array = arrayOf(mockSwipe("share"), mockSwipe("copy"),
-        mockSwipe("cut"), mockSwipe("edit"))
+        val array = arrayOf(mockSwipe(shareId), mockSwipe(copyId),
+        mockSwipe(cutId), mockSwipe(editId))
 
         val swipeList = LeftSwipeList(*array).prepare()
 
         assertEquals(true, swipeList.isNotEmpty)
         assertEquals(false, swipeList.isEmpty)
-        assertEquals("share", swipeList.activeSwipe?.id)
+        assertEquals(shareId, swipeList.activeSwipe?.id)
 
         repeat(20){ testNum ->
             var i = 0
@@ -50,10 +56,10 @@ class SwipeListTest {
             swipeList.shift()
             assertEquals(4, i)
         }
-        assertNotEquals("edit", swipeList.activeSwipe?.id)
-        assertEquals(true, swipeList.changeHistory("edit"))
+        assertNotEquals(editId, swipeList.activeSwipe?.id)
+        assertEquals(true, swipeList.changeHistory(editId))
         swipeList.prepare()
-        assertEquals("edit", swipeList.activeSwipe?.id)
+        assertEquals(editId, swipeList.activeSwipe?.id)
     }
 
 }

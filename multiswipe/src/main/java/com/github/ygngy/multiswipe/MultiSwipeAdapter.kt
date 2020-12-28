@@ -21,7 +21,7 @@ import kotlin.math.abs
 
 /**
  * Shorthand function that could be used to attach [MultiSwipeAdapter]
- * to [RecyclerView]
+ * to [RecyclerView].
  *
  * @param listener An optional listener to get events about swipes.
  * @param supportsRtl If is true and layout direction is RTL
@@ -56,7 +56,7 @@ fun RecyclerView.multiSwiping(
 /**
  * This class could be attached to [RecyclerView] using [ItemTouchHelper]:
  *
- * ItemTouchHelper(MultiSwipeAdapter(...)).attachToRecyclerView(recyclerView)
+ * Example: ItemTouchHelper(MultiSwipeAdapter(...)).attachToRecyclerView(recyclerView)
  *
  * @constructor Default constructor to instantiate [MultiSwipeAdapter].
  * @param listener An optional listener to get events about swipes.

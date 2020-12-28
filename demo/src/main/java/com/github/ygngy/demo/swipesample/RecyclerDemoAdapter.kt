@@ -96,7 +96,7 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
         // data to main MultiSwipeListener (if there is one)
         // for this demo i simply return this viewHolder
         // to MultiSwipeListener
-        override fun onSwipeDone(swipeId: String): Any? = this
+        override fun onSwipeDone(swipeId: Int): Any? = this
     }
 
     // Create new views (invoked by the layout manager)

@@ -29,12 +29,14 @@ import com.github.ygngy.multiswipe.SwipeTheme
 class SwipeCreator(private val context: Context, liked: Boolean) {
 
     companion object{
-        const val SWIPE_TO_SHARE_ID = "SHARE"
-        const val SWIPE_TO_COPY_ID = "COPY"
-        const val SWIPE_TO_CUT_ID = "CUT"
-        const val SWIPE_TO_LIKE_ID = "LIKE"
-        const val SWIPE_TO_EDIT_ID = "EDIT"
-        const val SWIPE_TO_DEL_ID = "DEL"
+        // swipe ids must be positive
+        // or IllegalArgumentException will be thrown
+        const val SWIPE_TO_SHARE_ID = 1
+        const val SWIPE_TO_COPY_ID = 2
+        const val SWIPE_TO_CUT_ID = 3
+        const val SWIPE_TO_LIKE_ID = 4
+        const val SWIPE_TO_EDIT_ID = 5
+        const val SWIPE_TO_DEL_ID = 6
     }
 
     val shareSwipe: Swipe

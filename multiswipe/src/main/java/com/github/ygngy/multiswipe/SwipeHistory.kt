@@ -12,13 +12,21 @@ package com.github.ygngy.multiswipe
  * Base class to save last used swipe's id.
  */
 sealed class SwipeHistory {
+
+    companion object {
+        /**
+         * In this library negative or zero ids for swipes is reserved as no id for empty history.
+         */
+        fun isValidSwipeId(id: Int) = id > 0
+    }
+
     /**
      * To change active swipe, set its id.
-     * setting null value has no effect.
+     * setting negative or zero value has no effect.
      */
-    var id: String? = null
+    var id: Int = 0
         set(value) {
-            if (value != null) field = value
+            if (isValidSwipeId(value)) field = value
         }
 
     /**

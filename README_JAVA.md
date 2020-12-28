@@ -46,7 +46,7 @@ The library requires Android **API level 16+**.
     <dependency>
         <groupId>com.github.ygngy</groupId>
         <artifactId>multiswipe</artifactId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
     </dependency>
     ```
 
@@ -67,7 +67,7 @@ The library requires Android **API level 16+**.
 
     ```groovy
     dependencies {
-        implementation 'com.github.ygngy:multiswipe:1.0.2'
+        implementation 'com.github.ygngy:multiswipe:1.1.0'
     }
     ```
 
@@ -84,7 +84,7 @@ public interface MultiSwipe {
     RightSwipeList getRightSwipeList();
 
     @Nullable
-    Object onSwipeDone(@NotNull String swipeId);
+    Object onSwipeDone(int swipeId);
 }
 ```
 
@@ -174,7 +174,7 @@ public RightSwipeList getRightSwipeList() {
 ```java
 @Nullable
 @Override
-public Object onSwipeDone(@NotNull String swipeId) {
+public Object onSwipeDone(int swipeId) {
     // Here handle swipe event and return some data to MultiSwipeListener
     // Instead you may choose to only return data
     // from this method to consume event at Activity or Fragment
@@ -198,7 +198,7 @@ multiSwiping(recyclerView, new MultiSwipeListener() { // optional listener
         // This method is called after onSwipeDone of ViewHolder
         // and data is the returned value of onSwipeDone of ViewHolder
         @Override
-        public void onSwipeDone(@NotNull String swipeId, @Nullable Object data) {
+        public void onSwipeDone(int swipeId, @Nullable Object data) {
             // data is the return value of "ViewHolder.onSwipeDone"
             // cast to data you returned from "ViewHolder.onSwipeDone"
             MyData myData = (MyData) data;
@@ -221,11 +221,7 @@ multiSwiping(recyclerView, new MultiSwipeListener() { // optional listener
             if (direction == SwipeDirection.END) fab.hide();
             else fab.show();
         }
-    },
-    true, // Switches leftSwipeList with rightSwipeList for RTL
-    true, // hides inactive icons when accepting swipe
-    .5F // The fraction of the View to be considered as accepted swiped
-);
+    });
 ```
 
 ## Credits

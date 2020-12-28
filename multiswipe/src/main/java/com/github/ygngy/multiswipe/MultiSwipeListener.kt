@@ -56,6 +56,6 @@ interface MultiSwipeListener {
      * @param swipeId The id of the [Swipe].
      * @param data Data returned from [MultiSwipe.onSwipeDone] (from ViewHolder.onSwipeDone).
      */
-    fun onSwipeDone(swipeId: String, data: Any?)
+    fun onSwipeDone(swipeId: Int, data: Any?)
 
 }
