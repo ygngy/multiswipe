@@ -106,11 +106,11 @@ class DemoActivity : AppCompatActivity() {
     private fun shareItem(holder: RecyclerDemoAdapter.ViewHolder){
         val shareText = holder.item?.data
         if (!shareText.isNullOrBlank()) {
-            ShareCompat.IntentBuilder.from(this)
-                    .setText(shareText)
-                    .setType("text/plain")
-                    .setChooserTitle(R.string.share_title)
-                    .startChooser()
+            ShareCompat.IntentBuilder(this).apply {
+                setText(shareText)
+                setType("text/plain")
+                setChooserTitle(R.string.share_title)
+            }.startChooser()
         }
     }
 
