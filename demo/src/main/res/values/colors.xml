@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="text_color">#FF3700B3</color>
+
     <color name="swipe_background">#036103</color>
     <color name="swipe_accept_background">#BA0846</color>
     <color name="swipe_text">#C5E1A5</color>
