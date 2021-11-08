@@ -46,7 +46,7 @@ The library requires Android **API level 16+**.
     <dependency>
         <groupId>com.github.ygngy</groupId>
         <artifactId>multiswipe</artifactId>
-        <version>1.1.4</version>
+        <version>1.1.5</version>
     </dependency>
     ```
 
@@ -67,7 +67,7 @@ The library requires Android **API level 16+**.
 
     ```groovy
     dependencies {
-        implementation 'com.github.ygngy:multiswipe:1.1.4'
+        implementation 'com.github.ygngy:multiswipe:1.1.5'
     }
     ```
 
