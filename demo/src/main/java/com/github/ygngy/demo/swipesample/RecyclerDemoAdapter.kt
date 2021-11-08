@@ -52,22 +52,22 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
 
             val sc = SwipeCreator(context, listItem.liked)
             // Testing different swipe counts based on data
-            when(listItem.data){
-                TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE -> {
+            when {
+                listItem.data.startsWith(TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE, true) -> {
                     mLeftSwipeList = LeftSwipeList(sc.shareSwipe, sc.cutSwipe)
                     mRightSwipeList = RightSwipeList(sc.likeSwipe)
                 }
-                ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE -> {
+                listItem.data.startsWith(ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE, true) -> {
                     mLeftSwipeList = LeftSwipeList(sc.shareSwipe)
                     mRightSwipeList = RightSwipeList(sc.likeSwipe, sc.delSwipe)
                 }
-                NO_LEFT_SWIPE -> {
+                listItem.data.startsWith(NO_LEFT_SWIPE, true) -> {
                     mLeftSwipeList = null
                     mRightSwipeList = RightSwipeList(
                             sc.likeSwipe, sc.editSwipe, sc.delSwipe
                     )
                 }
-                NO_RIGHT_SWIPE -> {
+                listItem.data.startsWith(NO_RIGHT_SWIPE, true) -> {
                     mLeftSwipeList = LeftSwipeList(
                             sc.shareSwipe, sc.copySwipe, sc.cutSwipe
                     )
