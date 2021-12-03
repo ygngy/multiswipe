@@ -46,7 +46,7 @@ interface MultiSwipeListener {
      * @param direction Layout side ([START][SwipeDirection.START]/[END][SwipeDirection.END])
      * of the row where swipe was started from or [NONE][SwipeDirection.NONE]
      * if swipe is closing or no swipe is active.
-     * @param swipeListSize Number of swipes in current direction.
+     * @param swipeListSize Number of available swipes in current direction.
      */
     fun swiping(direction: SwipeDirection, swipeListSize: Int)
 

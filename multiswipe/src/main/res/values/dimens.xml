@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="mswipe_edge_margin">8dp</dimen>
+    <dimen name="mswipe_icon_margin">8dp</dimen>
+    <dimen name="mswipe_tail_margin">4dp</dimen>
+    <dimen name="mswipe_text_margin">16dp</dimen>
+    <dimen name="mswipe_text_size">22sp</dimen>
+
+</resources>

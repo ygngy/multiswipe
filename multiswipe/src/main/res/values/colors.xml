@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="mswipe_background">#036103</color>
+    <color name="mswipe_background_accept">#BA0846</color>
+
+    <color name="mswipe_view_background">#C8E6C9</color>
+    <color name="mswipe_view_background_accept">#F8BBD0</color>
+
+    <color name="mswipe_text">#C5E1A5</color>
+    <color name="mswipe_accept_text">#F48FB1</color>
+
+</resources>

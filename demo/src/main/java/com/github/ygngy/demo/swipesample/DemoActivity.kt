@@ -14,7 +14,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -74,23 +73,23 @@ class DemoActivity : AppCompatActivity() {
                 // to this method. I returned viewHolder itself from onSwipeDone at viewHolder
                 val holder = data as RecyclerDemoAdapter.ViewHolder
                 when (swipeId) {
-                    SwipeCreator.SWIPE_TO_SHARE_ID -> shareItem(holder)
-                    SwipeCreator.SWIPE_TO_COPY_ID -> copyItem(holder)
-                    SwipeCreator.SWIPE_TO_CUT_ID -> cutItem(holder)
-                    SwipeCreator.SWIPE_TO_LIKE_ID -> toggleLike(holder)
-                    SwipeCreator.SWIPE_TO_EDIT_ID -> editItem(holder)
-                    SwipeCreator.SWIPE_TO_DEL_ID -> deleteItem(holder)
+                    SwipeCreatorBase.SWIPE_TO_SHARE_ID -> shareItem(holder)
+                    SwipeCreatorBase.SWIPE_TO_COPY_ID -> copyItem(holder)
+                    SwipeCreatorBase.SWIPE_TO_CUT_ID -> cutItem(holder)
+                    SwipeCreatorBase.SWIPE_TO_LIKE_ID -> toggleLike(holder)
+                    SwipeCreatorBase.SWIPE_TO_EDIT_ID -> editItem(holder)
+                    SwipeCreatorBase.SWIPE_TO_DEL_ID -> deleteItem(holder)
                 }
             }
 
         })
-    }
 
-    fun onAddClick(view: View){
-        val list = if (isDetailActivity) demoDetailList else demoList
-        val item = list[Random.nextInt(list.size)]
-        itemsList.add(item.copy(id = list.size + 1))
-        recyclerView.adapter?.notifyItemInserted(itemsList.lastIndex)
+        fab.setOnClickListener {
+            val list = if (isDetailActivity) demoDetailList else demoList
+            val item = list[Random.nextInt(list.size)]
+            itemsList.add(item.copy(id = list.size + 1))
+            recyclerView.adapter?.notifyItemInserted(itemsList.lastIndex)
+        }
     }
 
     private fun deleteItem(holder: RecyclerDemoAdapter.ViewHolder){

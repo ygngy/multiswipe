@@ -50,7 +50,9 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
                 onClick(listItem.id)
             }
 
-            val sc = SwipeCreator(context, listItem.liked)
+            //val sc = SwipeCreator(context, true, listItem.liked) // Custom Swipe Creation
+            val sc = DefaultSwipeCreator(context, true, listItem.liked) // Simple and Default Swipe Creation
+
             // Testing different swipe counts based on data
             when {
                 listItem.data.startsWith(TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE, true) -> {

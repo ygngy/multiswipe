@@ -9,53 +9,56 @@
 package com.github.ygngy.demo.swipesample
 
 import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import com.github.ygngy.multiswipe.Swipe
 import com.github.ygngy.multiswipe.SwipeIcon
 import com.github.ygngy.multiswipe.SwipeLabel
 import com.github.ygngy.multiswipe.SwipeTheme
 
 /**
- * A sample class used to create different swipes.
+ * A sample class used to create customized swipes in details.
+ * For simple (or default) swipe creation see [DefaultSwipeCreator] class.
  *
  * @constructor
  * @param context Used to get resources from.
+ * @param withLabel if true labels will be drawn otherwise only icons will be drawn
  * @param liked Used to select icon and label for [likeSwipe] theme.
  */
-class SwipeCreator(private val context: Context, liked: Boolean) {
+class SwipeCreator(context: Context, withLabel: Boolean, liked: Boolean) : SwipeCreatorBase(context){
 
-    companion object{
-        // swipe ids must be positive
-        // or IllegalArgumentException will be thrown
-        const val SWIPE_TO_SHARE_ID = 1
-        const val SWIPE_TO_COPY_ID = 2
-        const val SWIPE_TO_CUT_ID = 3
-        const val SWIPE_TO_LIKE_ID = 4
-        const val SWIPE_TO_EDIT_ID = 5
-        const val SWIPE_TO_DEL_ID = 6
-    }
+    override val shareSwipe: Swipe
+    override val copySwipe: Swipe
+    override val cutSwipe: Swipe
+    override val likeSwipe: Swipe
+    override val editSwipe: Swipe
+    override val delSwipe: Swipe
 
-    val shareSwipe: Swipe
-    val copySwipe: Swipe
-    val cutSwipe: Swipe
-    val likeSwipe: Swipe
-    val editSwipe: Swipe
-    val delSwipe: Swipe
+    /**
+     * A sample method used to prevent code repeat when creating [SwipeTheme].
+     *
+     * @receiver [SwipeTheme] To extend and change its icon and text.
+     * @param drawableRes Drawable resource id of icon in [SwipeTheme].
+     * @param stringRes String resource id of label in [SwipeTheme].
+     */
+    private fun SwipeTheme.extend(@DrawableRes drawableRes: Int,
+                                    @StringRes stringRes: Int): SwipeTheme = copy(
+        icon = icon.copy(drawable = getDrawable(drawableRes)),
+        label = label?.copy(text = getString(stringRes))
+    )
 
     init {
 
-        val shareLabel = SwipeLabel(
-                text = getString(R.string.share_label),
-                textColor = getColor(R.color.swipe_text),
-                textSize = getDimension(R.dimen.swipe_text_size),
-                margin = getDimension(R.dimen.swipe_text_margin),
-        )
+        val shareLabel = if(withLabel)
+                            SwipeLabel(
+                                text = getString(R.string.share_label),
+                                textColor = getColor(R.color.swipe_text),
+                                textSize = getDimension(R.dimen.swipe_text_size),
+                                margin = getDimension(R.dimen.swipe_text_margin),
+                            )
+                        else null
 
-        val shareIcon = SwipeIcon(drawable = getDrawable(R.drawable.ic_baseline_share_24)!!,
+        val shareIcon = SwipeIcon(drawable = getDrawable(R.drawable.ic_baseline_share_24),
                 edgeHorMargin = getDimension(R.dimen.swipe_edge_margin),
                 iconHorMargin = getDimension(R.dimen.swipe_icon_margin),
                 tailHorMargin = getDimension(R.dimen.swipe_tail_margin))
@@ -71,7 +74,7 @@ class SwipeCreator(private val context: Context, liked: Boolean) {
 
         val shareAcceptTheme = shareTheme.copy(
                 backgroundColor = getColor(R.color.swipe_accept_background),
-                label = shareLabel.copy(textColor = getColor(R.color.swipe_accept_text)),
+                label = shareLabel?.copy(textColor = getColor(R.color.swipe_accept_text)),
                 viewColor = getColor(R.color.view_background_accept_color)
         )
 
@@ -167,45 +170,5 @@ class SwipeCreator(private val context: Context, liked: Boolean) {
 
     }
 
-    /**
-     * A sample method used to prevent code repeat when creating [SwipeTheme].
-     *
-     * @receiver [SwipeTheme] To extend and change its icon and text.
-     * @param drawableRes Drawable resource id of icon in [SwipeTheme].
-     * @param stringRes String resource id of label in [SwipeTheme].
-     */
-    private fun SwipeTheme.extend(@DrawableRes drawableRes: Int,
-                                  @StringRes stringRes: Int): SwipeTheme = copy(
-                    icon = icon.copy(drawable = getDrawable(drawableRes)!!),
-                    label = label?.copy(text = getString(stringRes))
-            )
 
-    /**
-     * This method is used to shorten [ContextCompat.getDrawable]
-     * because it will be used a lot here.
-     */
-    private fun getDrawable(@DrawableRes drawableRes: Int) =
-            ContextCompat.getDrawable(context, drawableRes)
-
-    /**
-     * This method is used to shorten [ContextCompat.getColor]
-     * because it will be used a lot here.
-     */
-    private fun getColor(@ColorRes colorRes: Int) =
-            ContextCompat.getColor(context, colorRes)
-
-    /**
-     * This method is used to shorten [Context.getString]
-     * because it will be used a lot here.
-     */
-    private fun getString(@StringRes stringRes: Int) =
-            context.getString(stringRes)
-
-    /**
-     * This method is used to shorten
-     * [context.resources.getDimension][android.content.res.Resources.getDimension]
-     * because it will be used a lot here.
-     */
-    private fun getDimension(@DimenRes dimenRes: Int) =
-            context.resources.getDimension(dimenRes)
 }

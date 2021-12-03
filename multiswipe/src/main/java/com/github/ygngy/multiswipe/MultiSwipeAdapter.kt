@@ -236,7 +236,7 @@ open class MultiSwipeAdapter @JvmOverloads constructor(
             
             val mid = viewHolder.itemView.width * getSwipeThreshold(viewHolder)
             val accept = abs(dX) >= mid
-            val activeTheme = activeSwipe.getTheme(accept || acceptBack)
+            val activeTheme = if (accept || acceptBack) activeSwipe.acceptTheme else activeSwipe.activeTheme
             if (fromUser) {
                 acception = if (accept) viewHolder else null
             }

@@ -149,7 +149,7 @@ open class SwipeDrawerImpl: SwipeDrawer {
             if (hideInactiveIcons && swipeList.position > 0 ) break
 
             val icon = if (swipeList.position == 0) swipeTheme.icon.drawable
-            else swipe.inactiveDrawable
+            else swipe.inactiveIcon
 
 
             val iconWidth: Int
