@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdk 16
         targetSdk 31
-        versionCode 10
-        versionName "1.2.0"
+        versionCode 11
+        versionName "1.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -43,7 +43,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
-
+// Using Maven publish plugin
 // Because the components are created only during the afterEvaluate phase, you must
 // configure your publications using the afterEvaluate() lifecycle method.
 afterEvaluate {
@@ -56,7 +56,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = "com.github.ygngy.multiswipe"
                 artifactId = "multiswipe"
-                version = '1.2.0' // multiswipe library version
+                version = '1.2.1' // multiswipe library version
             }
         }
     }
