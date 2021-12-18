@@ -23,16 +23,17 @@ import com.github.ygngy.multiswipe.SwipeTheme
  * @constructor
  * @param context Used to get resources from.
  * @param withLabel if true labels will be drawn otherwise only icons will be drawn
- * @param liked Used to select icon and label for [likeSwipe] theme.
  */
-class SwipeCreator(context: Context, withLabel: Boolean, liked: Boolean) : SwipeCreatorBase(context){
+class SwipeCreator(context: Context, withLabel: Boolean) : SwipeCreatorBase(context){
 
     override val shareSwipe: Swipe
     override val copySwipe: Swipe
     override val cutSwipe: Swipe
-    override val likeSwipe: Swipe
     override val editSwipe: Swipe
     override val delSwipe: Swipe
+    override val likedSwipe: Swipe
+    override val unlikedSwipe: Swipe
+
 
     /**
      * A sample method used to prevent code repeat when creating [SwipeTheme].
@@ -93,17 +94,17 @@ class SwipeCreator(context: Context, withLabel: Boolean, liked: Boolean) : Swipe
                 R.drawable.ic_baseline_content_cut_24, R.string.cut_label
         )
 
-        val likeTheme = if (liked) shareTheme.extend(
+        val likedTheme = shareTheme.extend(
                 R.drawable.ic_baseline_favorite_24,
                 R.string.liked_label)
-        else shareTheme.extend(
+        val unlikedTheme = shareTheme.extend(
                 R.drawable.ic_baseline_favorite_border_24,
                 R.string.unliked_label)
 
-        val likeAcceptTheme = if (liked) shareAcceptTheme.extend(
+        val likedAcceptTheme = shareAcceptTheme.extend(
                 R.drawable.ic_baseline_favorite_border_24,
                 R.string.unlike_label)
-        else shareAcceptTheme.extend(
+        val unlikedAcceptTheme = shareAcceptTheme.extend(
                 R.drawable.ic_baseline_favorite_24,
                 R.string.like_label)
 
@@ -145,15 +146,6 @@ class SwipeCreator(context: Context, withLabel: Boolean, liked: Boolean) : Swipe
                 inactiveIcon = getDrawable(R.drawable.ic_disabled_content_cut_24)
         )
 
-        likeSwipe = Swipe(
-                id = SWIPE_TO_LIKE_ID,
-                activeTheme = likeTheme,
-                acceptTheme = likeAcceptTheme,
-                inactiveIcon = getDrawable(
-                if (liked) R.drawable.ic_disabled_favorite_24
-                else R.drawable.ic_disabled_favorite_border_24)
-        )
-
         editSwipe = Swipe(
                 id = SWIPE_TO_EDIT_ID,
                 activeTheme = editTheme,
@@ -168,6 +160,19 @@ class SwipeCreator(context: Context, withLabel: Boolean, liked: Boolean) : Swipe
                 inactiveIcon = getDrawable(R.drawable.ic_disabled_delete_24)
         )
 
+        likedSwipe = Swipe(
+            id = SWIPE_TO_LIKE_ID,
+            activeTheme = likedTheme,
+            acceptTheme = likedAcceptTheme,
+            inactiveIcon = getDrawable(R.drawable.ic_disabled_favorite_24)
+        )
+
+        unlikedSwipe = Swipe(
+            id = SWIPE_TO_LIKE_ID,
+            activeTheme = unlikedTheme,
+            acceptTheme = unlikedAcceptTheme,
+            inactiveIcon = getDrawable(R.drawable.ic_disabled_favorite_border_24)
+        )
     }
 
 

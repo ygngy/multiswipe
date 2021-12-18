@@ -39,10 +39,13 @@ abstract class SwipeCreatorBase(private val context: Context) {
     abstract val shareSwipe: Swipe
     abstract val copySwipe: Swipe
     abstract val cutSwipe: Swipe
-    abstract val likeSwipe: Swipe
     abstract val editSwipe: Swipe
     abstract val delSwipe: Swipe
+    abstract val likedSwipe: Swipe
+    abstract val unlikedSwipe: Swipe
 
+    fun getLikeSwipe(liked: Boolean): Swipe
+            = if (liked) likedSwipe else unlikedSwipe
 
     /**
      * This method is used to shorten [ContextCompat.getDrawable]

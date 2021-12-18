@@ -19,19 +19,8 @@ import com.github.ygngy.multiswipe.Swipe
  * @constructor
  * @param context Used to get resources from.
  * @param withLabel if true labels will be drawn otherwise only icons will be drawn
- * @param liked Used to select icon and label for [likeSwipe] theme.
  */
-class DefaultSwipeCreator(context: Context, private val withLabel: Boolean, liked: Boolean): SwipeCreatorBase(context) {
-
-    override val likeSwipe = Swipe(
-        context = context,
-        id = SWIPE_TO_LIKE_ID,
-        activeIcon = getDrawable(if (liked) R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24),
-        activeLabel = getLabel(if (liked) R.string.liked_label else R.string.unliked_label),
-        acceptIcon = getDrawable(if (liked) R.drawable.ic_baseline_favorite_border_24 else R.drawable.ic_baseline_favorite_24),
-        acceptLabel = getLabel(if (liked) R.string.unlike_label else R.string.like_label),
-        inactiveIcon = getDrawable(if (liked) R.drawable.ic_disabled_favorite_24 else R.drawable.ic_disabled_favorite_border_24)
-    )
+class DefaultSwipeCreator(context: Context, private val withLabel: Boolean): SwipeCreatorBase(context) {
 
     override val shareSwipe = Swipe(
         context = context,
@@ -74,6 +63,27 @@ class DefaultSwipeCreator(context: Context, private val withLabel: Boolean, like
         acceptIcon = getDrawable(R.drawable.ic_baseline_delete_forever_24),
         inactiveIcon = getDrawable(R.drawable.ic_disabled_delete_24)
     )
+
+    override val likedSwipe: Swipe = Swipe(
+            context = context,
+            id = SWIPE_TO_LIKE_ID,
+            activeIcon = getDrawable(R.drawable.ic_baseline_favorite_24),
+            activeLabel = getLabel(R.string.liked_label),
+            acceptIcon = getDrawable(R.drawable.ic_baseline_favorite_border_24),
+            acceptLabel = getLabel(R.string.unlike_label),
+            inactiveIcon = getDrawable(R.drawable.ic_disabled_favorite_24)
+        )
+
+    override val unlikedSwipe: Swipe = Swipe(
+            context = context,
+            id = SWIPE_TO_LIKE_ID,
+            activeIcon = getDrawable(R.drawable.ic_baseline_favorite_border_24),
+            activeLabel = getLabel(R.string.unliked_label),
+            acceptIcon = getDrawable(R.drawable.ic_baseline_favorite_24),
+            acceptLabel = getLabel(R.string.like_label),
+            inactiveIcon = getDrawable(R.drawable.ic_disabled_favorite_border_24)
+        )
+
 
     private fun getLabel(@StringRes stringRes: Int) =
         if (withLabel) getString(stringRes) else null
