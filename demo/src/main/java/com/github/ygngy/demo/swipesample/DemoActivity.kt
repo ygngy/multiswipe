@@ -50,7 +50,7 @@ class DemoActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             layoutManager = LinearLayoutManager(this@DemoActivity)
             addItemDecoration(DividerItemDecoration(this@DemoActivity, DividerItemDecoration.VERTICAL))
-            adapter = RecyclerDemoAdapter(itemsList) {
+            adapter = RecyclerDemoAdapter(this@DemoActivity, itemsList) {
                 // starting another sample activity to compare swipe buttons order with current order
                 startActivity(
                         Intent(this@DemoActivity,

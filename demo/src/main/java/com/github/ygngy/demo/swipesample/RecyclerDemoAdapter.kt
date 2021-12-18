@@ -9,6 +9,7 @@
 package com.github.ygngy.demo.swipesample
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,16 +21,18 @@ import com.github.ygngy.multiswipe.*
 /**
  * A sample [RecyclerView] adapter used to show demo lists.
  */
-class RecyclerDemoAdapter(private val dataSet: List<ListItem>
-        , private val onClick: (Int) -> Unit) :
+class RecyclerDemoAdapter(context: Context, private val dataSet: List<ListItem>
+                          , private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RecyclerDemoAdapter.ViewHolder>(){
+
+    //val sc = SwipeCreator(context, true) // Custom Swipe Creation
+    val sc = DefaultSwipeCreator(context, true) // Simple and Default Swipe Creation
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view), MultiSwipe {
-        private val context = view.context
         private val textView: TextView = view.findViewById(R.id.title)
         private val imageView: ImageView = view.findViewById(R.id.like)
 
@@ -50,23 +53,20 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
                 onClick(listItem.id)
             }
 
-            //val sc = SwipeCreator(context, true, listItem.liked) // Custom Swipe Creation
-            val sc = DefaultSwipeCreator(context, true, listItem.liked) // Simple and Default Swipe Creation
-
             // Testing different swipe counts based on data
             when {
                 listItem.data.startsWith(TWO_LEFT_SWIPE_ONE_RIGHT_SWIPE, true) -> {
                     mLeftSwipeList = LeftSwipeList(sc.shareSwipe, sc.cutSwipe)
-                    mRightSwipeList = RightSwipeList(sc.likeSwipe)
+                    mRightSwipeList = RightSwipeList(sc.getLikeSwipe(listItem.liked))
                 }
                 listItem.data.startsWith(ONE_LEFT_SWIPE_TWO_RIGHT_SWIPE, true) -> {
                     mLeftSwipeList = LeftSwipeList(sc.shareSwipe)
-                    mRightSwipeList = RightSwipeList(sc.likeSwipe, sc.delSwipe)
+                    mRightSwipeList = RightSwipeList(sc.getLikeSwipe(listItem.liked), sc.delSwipe)
                 }
                 listItem.data.startsWith(NO_LEFT_SWIPE, true) -> {
                     mLeftSwipeList = null
                     mRightSwipeList = RightSwipeList(
-                            sc.likeSwipe, sc.editSwipe, sc.delSwipe
+                            sc.getLikeSwipe(listItem.liked), sc.editSwipe, sc.delSwipe
                     )
                 }
                 listItem.data.startsWith(NO_RIGHT_SWIPE, true) -> {
@@ -80,7 +80,7 @@ class RecyclerDemoAdapter(private val dataSet: List<ListItem>
                             sc.shareSwipe, sc.copySwipe, sc.cutSwipe
                     )
                     mRightSwipeList = RightSwipeList(
-                            sc.likeSwipe, sc.editSwipe, sc.delSwipe
+                            sc.getLikeSwipe(listItem.liked), sc.editSwipe, sc.delSwipe
                     )
                 }
             }
