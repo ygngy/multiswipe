@@ -41,7 +41,7 @@ interface MultiSwipeListener {
 
     /**
      * This method could be used to clear on screen widgets such as FABs while swiping.
-     * This method may be called a lot in each swipe cause of [direction] change.
+     * This method may be called a lot in each swipe as a result of [direction] change.
      *
      * @param direction Layout side ([START][SwipeDirection.START]/[END][SwipeDirection.END])
      * of the row where swipe was started from or [NONE][SwipeDirection.NONE]
@@ -51,7 +51,8 @@ interface MultiSwipeListener {
     fun swiping(direction: SwipeDirection, swipeListSize: Int)
 
     /**
-     * This method will be called when user swipes enough to triggers swipe's action.
+     * This method will be called after [MultiSwipe.onSwipeDone]
+     * when swipe is done and [swipeId] action needs to be done.
      *
      * @param swipeId The id of the [Swipe].
      * @param data Data returned from [MultiSwipe.onSwipeDone] (from ViewHolder.onSwipeDone).

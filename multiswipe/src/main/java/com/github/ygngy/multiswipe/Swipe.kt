@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import com.github.ygngy.multiswipe.SwipeHistory.Companion.isValidSwipeId
 
 /**
- * Represents icons and text above [backgroundColor]
+ * Represents colors, icons and text
  * below each [RecyclerView][androidx.recyclerview.widget.RecyclerView] row.
  *
  * @constructor [backgroundColor] will be drawn fully below icons and texts
@@ -27,14 +27,14 @@ import com.github.ygngy.multiswipe.SwipeHistory.Companion.isValidSwipeId
  * [icon] contains swipe's icon and margin between icons.
  * [label] is optional and is used to clarifying the icon action better.
  * **In this constructor default [backgroundColor] and [viewColor] is transparent.**
- * So if you want to use this constructor and have background color you need to pass it to this constructor.
+ * So if you want to use this constructor showing background color you need to pass it to this constructor.
  * If you want to use default background colors (green and red) you may use other constructors with [Context] argument.
  *
  * @property icon Swipe's icon and margin between icons.
  * @property label Used to clarify the icon's action better.
  * [label] Will be drawn only if there is enough height
  * to draw text based on [SwipeLabel.textSize].
- * @property backgroundColor Wll be drawn fully below icons and texts and rows of recyclerView (default is transparent).
+ * @property backgroundColor Wll be drawn fully below [icon] and [label] and rows of recyclerView (default is transparent).
  * @property viewColor Used to draw a background (default is transparent)
  * below swiped view and **above** [label], [icon] and [backgroundColor].
  * But it will be hidden below view's background if view has a background.
@@ -54,7 +54,7 @@ data class SwipeTheme
      * @param context is used to extract default values from resources.
      * @param icon a drawable used to draw swipe icon
      * @param label optional label to explain swipe action. Label will be hidden if height is to small for label.
-     * @param isAcceptTheme used to select default colors for label and backgrounds (default is false). Pass true value if you want to apply this theme when swipe move is enough to accept swipe action
+     * @param isAcceptTheme used to select default colors for label and backgrounds (default is false). Pass true value if you want to apply this theme when swipe displacement is more than accept boundary
      * @param labelColor color used to draw label (if [isAcceptTheme] is true default is pale red otherwise default is pale green)
      * @param backgroundColor color used to draw background below icon and label (if [isAcceptTheme] is true default is red otherwise default is green)
      * @param viewColor color used to draw view background (in day theme of Android if [isAcceptTheme] is true default is pale red otherwise is pale green. in night theme of Android view background may be gray or black)
@@ -99,13 +99,13 @@ data class SwipeTheme
  * [textColor] is color of [text] in [SwipeLabel].
  * [textSize] is Size of [text] in [SwipeLabel].
  * But in case of too large [textSize] for height of view, label will be hidden.
- * [margin] is Horizontal margin between [text] and last icon when this [SwipeLabel] is shown.
+ * [margin] is Horizontal margin between [text] and the icon next to it, when this [SwipeLabel] is shown.
  *
  *
  * @property text Text of [SwipeLabel].
  * @property textColor Color of [text] in [SwipeLabel].
  * @property textSize Size of [text] in [SwipeLabel]. In case of too large [textSize] for height of view, label will be hidden.
- * @property margin Horizontal margin between [text] and last icon when this [SwipeLabel] is shown.
+ * @property margin Horizontal margin between [text] and the icon next to it, when this [SwipeLabel] is shown.
  */
 data class SwipeLabel(val text: String,
                       val textColor: Int,
@@ -113,15 +113,15 @@ data class SwipeLabel(val text: String,
                       val margin: Float) {
 
     /**
-     * This constructor is same as default constructor
+     * This constructor is same as main constructor
      * but in this constructor you may omit some argument and use defaults.
      *
      * @param context is used to extract default values from resources.
      * @param text Text of [SwipeLabel].
-     * @param isAcceptLabel is used to define text color if no value for [textColor] is provided.
+     * @param isAcceptLabel is used to define text color if no value for [textColor] is provided. Use true for pale red and false for pale green.
      * @param textColor Color of [text] in [SwipeLabel].
      * @param textSize Size of [text] in [SwipeLabel].
-     * @param margin Horizontal margin between text and last icon when this [SwipeLabel] is shown.
+     * @param margin Horizontal margin between text and the icon next to it, when this [SwipeLabel] is shown.
      */
     @JvmOverloads
     constructor(context: Context,
@@ -142,7 +142,7 @@ data class SwipeLabel(val text: String,
 }
 
 /**
- * Represents swipe icon and margins for icons and is used for [SwipeTheme].
+ * Represents swipe icon and icon margins and is used for [SwipeTheme].
  *
  * @constructor [drawable] Drawable will be drawn as swipe icon.
  * [edgeHorMargin] Horizontal margin between [drawable] and edge of view.
@@ -160,7 +160,7 @@ data class SwipeIcon(val drawable: Drawable,
                      val tailHorMargin: Float){
 
     /**
-     * This constructor is same as default constructor
+     * This constructor is same as main constructor
      * but in this constructor you may omit some argument and use defaults.
      *
      * @param context is used to extract default values from resources.
@@ -186,17 +186,16 @@ data class SwipeIcon(val drawable: Drawable,
  * @constructor [id] is used to identify this specific swipe.
  * **[id] Must be greater than zero or [IllegalArgumentException] will be thrown.**
  * [activeTheme] is used when this swipe is active.
- * [acceptTheme] is used when the user has moved enough to trigger swipe's action.
+ * [acceptTheme] is used when the swipe displacement is more than accept boundary.
  * [inactiveIcon] is used to draw this swipe when this swipe is inactive.
- * **Note**: Default value for [acceptTheme] and [inactiveIcon] is value of [activeTheme].
+ * **Note**: Default value for [acceptTheme] and [inactiveIcon] is the value of [activeTheme].
  *
- * @property id Used to notify listeners which swipe is triggered and to remember last triggered swipe.
+ * @property id Is used to notify listeners which swipe is triggered and to remember last triggered swipe.
  * **[id] Must be greater than zero or [IllegalArgumentException] will be thrown**.
- * @property activeTheme Swipe theme used when this swipe is active but is not at accept state
- * (user has not moved enough to trigger swipe's action).
- * @property acceptTheme The Swipe theme used when the user has moved enough to trigger swipe's action.
+ * @property activeTheme is used when this swipe is active but swipe displacement is less than accept boundary.
+ * @property acceptTheme Is used when swipe displacement is more than accept boundary.
  * @property inactiveIcon Used to draw this swipe when this swipe is inactive.
- * **Note:** In each user move only one swipe is active (or accept) and other swipes are inactive
+ * **Note:** In each swipe move only one swipe is active (or accept) and other swipes are inactive
  * from inactive swipes only [inactiveIcon] will be drawn with active (or accept) theme of active (or accept) swipe.
  */
 data class Swipe @JvmOverloads constructor(
@@ -211,10 +210,10 @@ data class Swipe @JvmOverloads constructor(
      * @param context is used to extract default values from resources.
      * @param id Used to notify listeners which swipe is triggered and to remember last triggered swipe.
      * **[id] Must be greater than zero or [IllegalArgumentException] will be thrown**.
-     * @param activeIcon icon used for active theme (when this swipe is active but it does not have enough swipe move to consider as accepted)
-     * @param activeLabel label used for active theme
-     * @param acceptIcon icon used for accept theme
-     * @param acceptLabel label used for accept theme
+     * @param activeIcon icon used for [activeTheme] (when this swipe is active but its displacement is less than accept boundary)
+     * @param activeLabel label used for [activeTheme] (when this swipe is active but its displacement is less than accept boundary)
+     * @param acceptIcon icon used for [acceptTheme] (when this swipe displacement is more than accept boundary)
+     * @param acceptLabel label used for [acceptTheme] (when this swipe displacement is more than accept boundary)
      * @param inactiveIcon icon used when this swipe is not in active or accept state (another swipe is in active or accept state)
      *
      */

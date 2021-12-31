@@ -24,7 +24,7 @@ interface SwipeDrawer {
      * of this interface.
      * Use this method to initialize each frame draw.
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      *
@@ -34,10 +34,10 @@ interface SwipeDrawer {
      * @param dX The amount of horizontal displacement caused by user's action
      * or by animating back.
      * @param swipeList Prepared (ready) swipe list
-     * ([SwipeList.prepare] is called on it).
+     * ([SwipeList.prepare] is called on it before).
      * @param swipe Current swipe.
      * @param swipeTheme Current swipe theme.
-     * @param hideInactiveIcons If true inactive icons should **not** be drawn
+     * @param hideInactiveIcons Is true if inactive icons should **not** be drawn and
      * only the active icon (icon of first item in [swipeList]) should be drawn.
      * @param fromUser Is true if this view is currently being controlled by the user
      * or false if it is simply animating back to its original state.
@@ -57,7 +57,7 @@ interface SwipeDrawer {
      * This method will be called after [initDraw]
      * and before [drawIcons].
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      */
@@ -69,7 +69,7 @@ interface SwipeDrawer {
      * This method will be called after [drawBackground]
      * and before [drawLabel].
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      */
@@ -81,7 +81,7 @@ interface SwipeDrawer {
      * This method will be called after [drawIcons]
      * and before [drawView].
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      */
@@ -94,7 +94,7 @@ interface SwipeDrawer {
      * This method will be called after [drawLabel]
      * and before [drawEnds].
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      */
@@ -106,7 +106,7 @@ interface SwipeDrawer {
      * This method will be called after all other methods of this interface
      * for each frame draw.
      *
-     * **Caution**: Avoid creating any object in this method
+     * **Caution**: Avoid creating any object or doing time consuming tasks in this method
      * because it will be called a lot in child draw of [RecyclerView].
      * Create any object at constructor and use them here.
      */

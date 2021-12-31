@@ -40,7 +40,8 @@ interface MultiSwipe {
 
 
     /**
-     * This method will be called when user moves enough to triggers swipe's action.
+     * This method will be called once swipe is done
+     * and [swipeId] action needs to be done.
      *
      * [ViewHolder][androidx.recyclerview.widget.RecyclerView.ViewHolder]
      * can handle swipes here and/or return any data

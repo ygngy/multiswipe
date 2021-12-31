@@ -23,16 +23,16 @@ import kotlin.math.abs
  * Shorthand function that could be used to attach [MultiSwipeAdapter]
  * to [RecyclerView].
  *
- * @param listener An optional listener to get events about swipes.
+ * @param listener An optional listener to handle swipe events.
  * @param supportsRtl If is true and layout direction is RTL
  * left swipe list will be used at right side and right list at left side of each row
  * (default value: false).
- * @param hideInactiveIcons If true when swipe is in accepting state
+ * @param hideInactiveIcons If is true when swipe displacement is more than accept boundary ([swipeThreshold])
  * inactive icons will be hidden (default value: true).
- * @param swipeThreshold The fraction that the user should move the View to be considered as swiped.
+ * @param swipeThreshold Defines accept boundary and is the fraction that the user should move the View to be considered as accepting swipe.
  * The fraction is calculated with respect to View's bounds.
  * Default value is .5f, which means, to swipe a View, user must move the View
- * at least half of View's width. This value mus be between 0 and 1
+ * at least half of the View's width. This value mus be between 0 and 1
  * (default value: .5F).
  * @param drawer Used to draw backgrounds, icons and labels for swipes.
  * To change draws use a custom subclass of [SwipeDrawerImpl] or implementation of [SwipeDrawer].
@@ -63,12 +63,12 @@ fun RecyclerView.multiSwiping(
  * @param supportsRtl If is true and layout direction is RTL
  * left swipe list will be used at right side and right list at left side of each row
  * (default value: false).
- * @param hideInactiveIcons If true when swipe is in accepting state inactive icons will be hidden
- * (default value: true).
- * @param swipeThreshold The fraction that the user should move the View to be considered as swiped.
+ * @param hideInactiveIcons If is true when swipe displacement is more than accept boundary ([swipeThreshold])
+ * inactive icons will be hidden (default value: true).
+ * @param swipeThreshold Defines accept boundary and is the fraction that the user should move the View to be considered as accepting swipe.
  * The fraction is calculated with respect to View's bounds.
  * Default value is .5f, which means, to swipe a View, user must move the View
- * at least half of View's width. This value mus be between 0 and 1
+ * at least half of the View's width. This value mus be between 0 and 1
  * (default value: .5F).
  * @param drawer Used to draw backgrounds, icons and labels for swipes.
  * To change draws use a custom subclass of [SwipeDrawerImpl] or implementation of [SwipeDrawer].
@@ -85,7 +85,7 @@ open class MultiSwipeAdapter @JvmOverloads constructor(
 
     init {
         if (swipeThreshold <= 0 || swipeThreshold >= 1)
-            throw IllegalArgumentException("swipeThreshold must be between 0 and 1 (exclusive)")
+            throw IllegalArgumentException("swipeThreshold must be between 0 and 1 exclusively")
     }
 
     private var layoutDirection = ViewCompat.LAYOUT_DIRECTION_LTR

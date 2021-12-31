@@ -18,16 +18,22 @@ Below watch the **Multiswipe** library in action:
 
 ![Multiswipe](screenshots/multiswipe.gif "Multiswipe in action")
 
-*Each left and right sides could have zero, one or more swipes.  
+*Each left and right sides could have zero, one or more swipe types.  
 If user swipes greater than half of the view's width then only swipe action will be executed.  
-Otherwise if there is more than one swipe (in each side) and user swipes less than half of the view's width then swipe switches to next one.  
-Here **half** of the view could be any fraction that the developer chooses.*
+Otherwise if there is more than one swipe type in current side and user swipes less than half of the view's width then swipe switches to next one.  
+Here **half** of the view could be any fraction that the developer chooses once for all recyclerview rows.*
+
+As you see in above image, FAB hides when it is in same side with swiped view. This is an optional choice for the developer and developer can easily hide views (or do any action) if needed at swipes. Also, developer can easily customize colors, icons, actions and many other properties of this library. 
 
 ## Requirements
 
-The library requires Android **API level 16+**.
+The library requires Android **API level 16** or above.
+
+You may use Maven or Gradle to build your app here is needed steps for both:
 
 ## Setup in Maven
+
+If you are using Maven build system use these steps to add multiswipe library to your project.
 
 1. Add the JitPack repository to your build file:
 
@@ -52,18 +58,18 @@ The library requires Android **API level 16+**.
 
 ## Setup in Gradle
 
-1. Add it in project's root `build.gradle` at the end of repositories:
+If you are using Gradle build system use these steps to add multiswipe library to your project.
+
+1. Add `jitpack.io` to your project’s repositories. Your repositories list may be in `settings.gradle` file or in project’s root `build.gradle` file:
 
     ```groovy
-    allprojects {
-        repositories {
-            //...
-            maven { url 'https://jitpack.io' }
-        }
+    repositories {
+        //...
+        maven { url 'https://jitpack.io' }
     }
     ```
 
-2. Add the dependency to app's `build.gradle`:
+2. Add the required dependency to app's `build.gradle`:
 
     ```groovy
     dependencies {
@@ -84,23 +90,24 @@ interface MultiSwipe {
 ```
 
 `leftSwipeList` and `rightSwipeList` must return swipe lists for left and right side or `null` for no swipe.  
-`onSwipeDone` will be called with `swipeId` when user swipes.
+Once swipe is done `onSwipeDone` will be called with `swipeId`. `onSwipeDone` is the method that we should do the `swipeId` action or return a value to do the action at activity or fragment.
 
-### Create swipe lists at `ViewHolder`'s bind method
-There are two ways to create swipes (customized and default), below is concise way using default colors:
+### Create swipe lists at adapter's constructor or `ViewHolder`'s bind method
+As said above you must return swipe lists for left and right side or null from `leftSwipeList` and `rightSwipeList`. But you should not create any object in these properties because they may be called too many times in each swipe. So, we should create swipe lists before and only return it in these properties.
+There are many ways to create swipes, below is a concise way using default colors. I will explain how to create custom swipes later:
 ```kotlin
 // Each swipe contains of at least an id and an icon
 val likeSwipe = Swipe(
         context = context, // context used to extract default colors and margins from resources
-        id = SWIPE_TO_LIKE_ID, // swipe id will be sent to onSwipeDone
-        activeIcon = getDrawable(R.drawable.ic_like_24), // swipe icon
-        activeLabel = getLabel(R.string.like), // OPTIONAL swipe label
-        acceptIcon = getDrawable(R.drawable.ic_like_accept_24),// OPTIONAL icon used when swipe move is enough to accept it
-        acceptLabel = getLabel(R.string.like_accept),// OPTIONAL label used when swipe move is enough to accept it
-        inactiveIcon = getDrawable(R.drawable.ic_disabled_like_24)// OPTIONAL icon used for inactive themes
+        id = SWIPE_TO_LIKE_ID, // swipe id will be sent to onSwipeDone when swipe is accepted
+        activeIcon = getDrawable(R.drawable.ic_like_24)!!, // swipe icon
+        activeLabel = getString(R.string.like), // OPTIONAL swipe label
+        acceptIcon = getDrawable(R.drawable.ic_like_accept_24)!!,// OPTIONAL icon used when swipe move is enough to be accepted
+        acceptLabel = getString(R.string.like_accept),// OPTIONAL label used when swipe move is enough to be accepted
+        inactiveIcon = getDrawable(R.drawable.ic_disabled_like_24)!!// OPTIONAL icon used when this swipe is inactive or in queue
     )
 
-// Create other swipes (shareSwipe, copySwipe, ...) in similar way.
+// Create other swipes (shareSwipe, copySwipe, ...) in a similar way.
 
 // If row has left swipes create left swipe list in the desired order 
 mLeftSwipeList = LeftSwipeList (shareSwipe, copySwipe, cutSwipe)
@@ -120,7 +127,8 @@ override val rightSwipeList: RightSwipeList?
 ```
 
 ### At `onSwipeDone` of `ViewHolder` handle swipe event
-
+Now you have implemented `leftSwipeList` and `rightSwipeList` of `MultiSwipe` interface in `ViewHolder` and you need to implement `onSwipeDone` of it. 
+Once swipe is done `onSwipeDone` will be called with `swipeId`. `onSwipeDone` is the method that we should do the `swipeId` action or return a value to do the action at activity or fragment. You can handle swipes here and/or return an optional value from this method that will be sent to an optional swipe listener in activity or fragment.
 ```kotlin
 // Here handle swipe event and return some data to MultiSwipeListener 
 override fun onSwipeDone(swipeId: Int): Any? {
@@ -140,6 +148,8 @@ override fun onSwipeDone(swipeId: Int): Any? {
 ```
 
 ### At `Activity` or `Fragment` attach `MultiSwipeAdapter` to `RecyclerView`
+
+This is the last step to setup this library.
 
 ```kotlin
 recyclerView.multiSwiping(object: MultiSwipeListener { // OPTIONAL listener
@@ -166,30 +176,85 @@ recyclerView.multiSwiping(object: MultiSwipeListener { // OPTIONAL listener
             })
 ```
 
-At this point all setups are done however if you want to customize backgrounds or color of labels or margins read next section.
+`multiSwiping` method has more optional arguments:
+-	`listener`: An optional listener (`MultiSwipeListener`) to handle swipe events. 
+-	`supportsRtl`: Is an optional Boolean argument and if it is true and layout direction is **RTL** then **left** swipe list will be used at **right** side and **right** list at **left** side of each row. Default value for this argument is false meaning left list is always on left side and right list is always on right side.
+-	`hideInactiveIcons`: Is an optional Boolean argument and if it is true when swipe move is enough to be accepted, inactive icons will be hidden. Default value for this argument is true.
+-	`swipeThreshold`: Is an optional `float` argument and is the fraction that the user should move the `view` to be considered as complete swipe. The fraction is calculated with respect to the view's bounds. Default value is .5f, which means, to swipe a `view`, user must move the `view` at least half of the `view`'s width. This value must be between 0 and 1. Default value is .5F.
+-	`drawer`: Used to draw backgrounds, icons and labels for swipes. To change draws, use a custom subclass of `SwipeDrawerImpl` or implementation of `SwipeDrawer`. This argument should be used only in advanced situations where you need to override swipe draw events or draw something between drawing of background, icon, label and view. There is no need to use this argument just to change colors and icons. At next section I will show you how change colors and icons easily **without** using `drawer`. 
+
+
+
+Listener argument in `multiswiping` function is an object implementing interface: `MultiSwipeListener`. This interface has two methods: `onSwipeDone` and `swiping`.
+-	`onSwipeDone` method of this interface is the last place to handle swipe action. when swipe is done `onSwipeDone` of `MultiSwipeListener` is called after `onSwipeDone` method of `ViewHolder`. This method receives swipe id and any object returned from `onSwipeDone` of `ViewHolder`. If you wonder that there is no `onSwipeDone` in `ViewHolder`, remember that `ViewHolder` must implement `MultiSwipe` interface which has `onSwipeDone` method.
+-	`multiswiping` method is called when user swipes (moves) view. This method has two arguments, `SwipeDirection` which specifies swipe state and is an enum and may be `START` for swipe at view’s start side, `END` for swipe at view’s end side or `NONE` for swipe closing. Second argument is `swipeListSize` which specifies the number of available swipes in that side and dictates the number of swipe icons and required vision space in that side. In this method you may hide some on screen views such as FABs or Floating Action Buttons that are covering swipe icons.
+
+
+
+At this point all setups are done however if you want to customize backgrounds, color of labels, label size or margins read next section.
 
 ------------------------------------------------
 
+
 ## How to create custom Swipe themes
-If you want to change backgrounds or color of labels or margins between icons you need to create custom swipe themes.
-Below is a sample using custom swipe theme:
+Swipe lists for left and right side is represented with `LeftSwipeList` and `RightSwipeList` classes. These classes get `Swipe` objects in constructor. So, to create swipes you need to create objects of type `Swipe`. This section explains how to create custom swipes. 
+
+The simplest way to create swipe is the constructor that only needs icons and labels and uses default colors and margins:
 
 ```kotlin
-// Setting swipe icon and margins
-val shareIcon = SwipeIcon(drawable = getDrawable(R.drawable.ic_baseline_share_24)!!,
-        edgeHorMargin = getDimension(R.dimen.swipe_edge_margin),// margin between edge of view and this icon
-        iconHorMargin = getDimension(R.dimen.swipe_icon_margin),// margin between this icon and first inactive icon
-        tailHorMargin = getDimension(R.dimen.swipe_tail_margin)// same margin used for separating inactive icons
-)
+// Each swipe contains of at least an id and an icon
+val likeSwipe = Swipe(
+        context = context, // context used to extract default colors and margins from resources
+        id = SWIPE_TO_LIKE_ID, // swipe id will be sent to onSwipeDone when swipe is accepted
+        activeIcon = getDrawable(R.drawable.ic_like_24)!!, // swipe icon
+        activeLabel = getString(R.string.like), // OPTIONAL swipe label
+        acceptIcon = getDrawable(R.drawable.ic_like_accept_24)!!,// OPTIONAL icon used when swipe move is enough to be accepted
+        acceptLabel = getString(R.string.like_accept),// OPTIONAL label used when swipe move is enough to be accepted
+        inactiveIcon = getDrawable(R.drawable.ic_disabled_like_24)!!// OPTIONAL icon used when this swipe is inactive or in a queue
+    )
+```
+But if you want to customize colors or margins you need to use another `Swipe` constructor instead of above constructor. This constructor needs two swipe themes instead of icon for two states of swipe:
 
-// Create an OPTIONAL swipe label
-val shareLabel = SwipeLabel(
-        text = getString(R.string.share_label),// label's text
-        textColor = getColor(R.color.swipe_text),// label's text color
-        textSize = getDimension(R.dimen.swipe_text_size),// label's text size
-        margin = getDimension(R.dimen.swipe_text_margin),// margin between label and last icon
+```kotlin
+// Each swipe contains of at least an id and a theme and optionally acceptTheme and inactiveIcon
+val shareSwipe = Swipe (
+       id = SWIPE_TO_SHARE_ID,// swipe id will be sent to onSwipeDone
+       activeTheme = shareTheme,// theme used when user is interacting with this swipe
+       acceptTheme = shareAcceptTheme,// OPTIONAL accept theme (default is same as activeTheme)
+       inactiveIcon = getDrawable(R.drawable.ic_disabled_share_24)!!// OPTIONAL icon used when this swipe is inactive or in a queue
 )
-// Create a `SwipeTheme` for each swipe
+```
+To use this constructor, you need to create objects of type `SwipeTheme`. The `SwipeTheme` has two constructors if you do **NOT** need to customize label **size** or **margins** you can use following constructor: 
+
+```kotlin
+SwipeTheme (
+        context: Context, // used to extract default values from resources.
+        icon: Drawable, // a drawable used to draw swipe icon.
+        label: String?, // optional label to explain swipe action.
+        isAcceptTheme: Boolean, // used to select default colors for label and backgrounds (default value is false)
+        labelColor: Int, // color used to draw label (if isAcceptTheme is true default is pale red otherwise default is pale green)
+        backgroundColor: Int, // color used to draw background below icon and label (if isAcceptTheme is true default is red otherwise default is green)
+        viewColor: Int // color used to draw view background (in day theme of Android if isAcceptTheme is true default is pale red otherwise is pale green. in night theme of Android view background may be gray or black)
+)
+```
+
+If you specify all color arguments of this constructor then no default color will be used thus `isAcceptTheme` argument value has no effect. But if you do not specify a color argument in this constructor `isAcceptThem` distinguishes default color for that.
+
+If you do not need to customize labels size or margins between icons and labels then you can skip to next section. Below classes is only needed for customizing text size and margins between text and icons. 
+
+Second constructor of `SwipeTheme` only is needed to customize text size and margins in addition to colors.
+
+```kotlin
+SwipeTheme (
+       icon: SwipeIcon, // contains swipe's icon and margin between icons.
+       label: SwipeLabel?, // optional label contains text, text color, text size and margin between text and icon
+       backgroundColor: Int, // will be drawn fully below icons and texts and rows of recyclerView (here default is transparent).
+       viewColor: Int // view’s background which is above swipe icons and text (here default is transparent).
+)
+```
+
+Usage:
+```kotlin
 val shareTheme = SwipeTheme (
         icon = shareIcon,// swipe icon
         label = shareLabel,// OPTIONAL swipe label (could be null)
@@ -198,25 +263,89 @@ val shareTheme = SwipeTheme (
         // To hide icons and label below each recyclerView's item you have to use viewColor OR layout background
         // viewColor is visible only if recyclerView's item layout don't have a background
 )
-// You can create an OPTIONAL accept theme to use when swipe move is enough to be accepted
+```
+
+
+There is two options to hide swipe icons below view: background color in view's layout file or `viewColor` here.
+
+To use above constructor, you need to create object of `SwipeIcon` and optionally (if you want a label) `SwipeLabel`. Below is constructor definition of these classes. 
+If you want to customize label’s size or margin you need to use this constructor of `SwipeLabel`:
+
+```kotlin
+ SwipeLabel (
+      val text: String, // text of the label
+      val textColor: Int, // text color of the label
+      val textSize: Float, // text size of the label
+      val margin: Float // margin between text and the icon next to it
+)
+```
+
+Usage:
+
+```kotlin
+// Create an OPTIONAL swipe label
+val shareLabel = SwipeLabel(
+        text = getString(R.string.share_label),// label's text
+        textColor = getColor(R.color.swipe_text),// label's text color
+        textSize = getDimension(R.dimen.swipe_text_size),// label's text size
+        margin = getDimension(R.dimen.swipe_text_margin),// margin between label and last icon
+)
+```
+
+You can use following constructor to customize margins between icons:
+```kotlin
+SwipeIcon (
+      drawable: Drawable, // drawable will be drawn as active swipe icon.
+      edgeHorMargin: Float, // horizontal margin between this active icon and edge of view.
+      iconHorMargin: Float, // horizontal margin between this active icon and first inactive icon (if there is any other icons).
+      tailHorMargin: Float // horizontal margin between inactive icons when this icon is active and there is more than one inactive icon.
+)
+```
+Usage:
+```kotlin
+// Setting swipe icon and margins
+val shareIcon = SwipeIcon(drawable = getDrawable(R.drawable.ic_baseline_share_24)!!,
+        edgeHorMargin = getDimension(R.dimen.swipe_edge_margin),// margin between edge of the view and this icon
+        iconHorMargin = getDimension(R.dimen.swipe_icon_margin),// margin between this icon and first inactive icon
+        tailHorMargin = getDimension(R.dimen.swipe_tail_margin)// same margin used for separating inactive icons
+)
+```
+
+## Best Practices
+
+- **Reusing objects**: 
+Creating above classes may look cumbersome, but all above classes are `data` class in Kotlin and you can use `copy` method of `data` class instead of creating a brand-new object. For instance, instead of creating a theme for accepting a swipe you can `copy` a theme with new values:
+
+```kotlin
 val shareAcceptTheme = shareTheme.copy(
         backgroundColor = getColor(R.color.swipe_accept_background),
         label = shareLabel.copy(textColor = getColor(R.color.swipe_accept_text)),
         viewColor = getColor(R.color.view_background_accept_color)
 )
-
-// Each swipe contains of at least an id and a theme and optionally acceptTheme and inactiveIcon
-shareSwipe = Swipe (
-       id = SWIPE_TO_SHARE_ID,// swipe id will be sent to onSwipeDone
-       activeTheme = shareTheme,// theme used when user is interacting with this swipe
-       acceptTheme = shareAcceptTheme,// OPTIONAL accept theme (default is same as activeTheme)
-       inactiveIcon = getDrawable(R.drawable.ic_disabled_share_24)// OPTIONAL icon used for inactive themes
-)
-// If row has left swipes create left swipe list in the desired order 
-mLeftSwipeList = LeftSwipeList (shareSwipe, copySwipe, cutSwipe)
-// If row has right swipes create right swipe list in the desired order
-mRightSwipeList = RightSwipeList (likeSwipe, editSwipe, delSwipe)
 ```
+Or even you may create only one theme and copy it for all other themes:
+
+```kotlin
+val delTheme = likeTheme.copy(
+        icon = getDrawable(R.drawable.ic_del_24dp)!!,
+        label = likeLabel.copy(text = getString(R.string.del))
+)
+val shareTheme = likeTheme.copy(
+        icon = getDrawable(R.drawable.ic_share_24dp)!!,
+        label = likeLabel.copy(text = getString(R.string.share))
+)
+```
+
+You can see a good example of reusing classes in demo app of library [here](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/SwipeCreator.kt).
+
+- **Create objects once**: 
+The recycler view may have many rows and many rows may have similar swipe actions. Instead of repeatedly creating swipes for every row, you should create each swipe type once and reuse it in all rows. You can create a special factory class that creates all swipes in constructor and exposes them as class property like [this](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/SwipeCreator.kt) and [this](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/DefaultSwipeCreator.kt) then create only one instance of this class at recyclerview [adapter](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/RecyclerDemoAdapter.kt) as in demo app.
+
+- Do not create any object in `leftSwipeList` and `rightSwipeList` of `MultiSwipe`
+As previously said `ViewHolder` must implement `MultiSwipe` interface and get swipe lists in `leftSwipeList` and `rightSwipeList` properties. But these properties may be called repeatedly in each swipe so you should not create any object in these properties. Because if you create objects in these properties, extra objects will be created in memory. Also creating objects in these properties may slows down swipe animations because creating objects may be time consuming.
+So where create swipes? Answer: If your swipes are repetitive in rows then best location for creating swipes is in recyclerView adapter because it will be created once. But if your swipes are not similar in rows and swipe actions and themes are very dependent to the content of the row then best location to create swipes is in bind method of ViewHolder.
+
+
 
 ---------------------------------------------------------------------------
 
