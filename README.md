@@ -238,7 +238,7 @@ SwipeTheme (
 )
 ```
 
-If you specify all color arguments of this constructor then no default color will be used thus `isAcceptTheme` argument value has no effect. But if you do not specify a color argument in this constructor `isAcceptThem` distinguishes default color for that.
+If you specify all color arguments of this constructor then no default color will be used thus `isAcceptTheme` argument value has no effect. But if you do not specify a color argument in this constructor `isAcceptTheme` distinguishes default color for that.
 
 If you do not need to customize labels size or margins between icons and labels then you can skip to next section. Below classes is only needed for customizing text size and margins between text and icons. 
 
@@ -343,7 +343,7 @@ The recycler view may have many rows and many rows may have similar swipe action
 
 - Do not create any object in `leftSwipeList` and `rightSwipeList` of `MultiSwipe`
 As previously said `ViewHolder` must implement `MultiSwipe` interface and get swipe lists in `leftSwipeList` and `rightSwipeList` properties. But these properties may be called repeatedly in each swipe so you should not create any object in these properties. Because if you create objects in these properties, extra objects will be created in memory. Also creating objects in these properties may slows down swipe animations because creating objects may be time consuming.
-So where create swipes? Answer: If your swipes are repetitive in rows then best location for creating swipes is in recyclerView adapter because it will be created once. But if your swipes are not similar in rows and swipe actions and themes are very dependent to the content of the row then best location to create swipes is in bind method of ViewHolder.
+So where create swipes? Answer: If your swipes are repetitive in rows then best location for creating swipes is in adapter of recyclerView  because it will be created once. But if your swipes are not similar in rows and swipe actions and themes are very dependent to the content of the row then best location to create swipes is in bind method of ViewHolder.
 
 
 
