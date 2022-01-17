@@ -14,16 +14,18 @@ A swipe library for RecyclerView in Android.
 
 ## Demo
 
-Below watch the **Multiswipe** library in action:
+In the image below, you can see a demo app that uses this library:
 
 ![Multiswipe](screenshots/multiswipe.gif "Multiswipe in action")
 
 *Each left and right sides could have zero, one or more swipe types.  
 If user swipes greater than half of the view's width then only swipe action will be executed.  
 Otherwise if there is more than one swipe type in current side and user swipes less than half of the view's width then swipe switches to next one.  
-Here **half** of the view could be any fraction that the developer chooses once for all recyclerview rows.*
+In this library, **half** of the view is called "**accept boundary**" and it could be any fraction that the developer chooses once for all recyclerview rows.*
 
-As you see in above image, FAB hides when it is in same side with swiped view. This is an optional choice for the developer and developer can easily hide views (or do any action) if needed at swipes. Also, developer can easily customize colors, icons, actions and many other properties of this library. 
+As you see background color changes during each swipe because each swipe changes from active state to accept state. When swipe displacement is smaller than "accept boundary" swipe is in active state and when swipe displacement is greater than "accept boundary" swipe is in accept state. Each of these two states has its own theme, called activeTheme and acceptTheme. These themes consist of icon, label, background color, label color, ... and these themes could be customized separately for each row of recyclerview. 
+
+As you see in above image, FAB hides when it is in same side with swipe icons. This is an optional choice for the developer and developer can easily hide views (or do any action) if needed at swipes. Also, developer can easily customize colors, icons, actions and many other properties of this library. 
 
 ## Requirements
 
@@ -98,27 +100,30 @@ public interface MultiSwipe {
 Once swipe is done `onSwipeDone` will be called with `swipeId`. `onSwipeDone` is the method that we should do the `swipeId` action or return a value to do the action at activity or fragment.
 
 ### Create swipe lists at adapter's constructor or `ViewHolder`'s bind method
-As said above you must return swipe lists for left and right side or null from `getLeftSwipeList` and `getRightSwipeList`. But you should not create any object in these methods because they may be called too many times in each swipe. So, we should create swipe lists before and only return it in these methods.
+As said above you must return swipe lists for left and right side or null from `getLeftSwipeList` and `getRightSwipeList`. But you should not create any object in these methods because they will be called every time a swipe starts or when swipe direction changes. So, we should create swipe lists before and only return it in these methods.
 There are many ways to create swipes, below is a concise way using default colors. I will explain how to create custom swipes later:
 ```java
 // Each swipe contains of at least an id and an icon
 Swipe likeSwipe = new Swipe(
         context, // context used to extract default colors and margins from resources
-        SWIPE_TO_LIKE_ID, //id: swipe id will be sent to onSwipeDone when swipe is accepted
+        SWIPE_TO_LIKE_ID, //id: swipe id will be sent to onSwipeDone when swipe is completed
         getDrawable(R.drawable.ic_like_24), //activeIcon: active swipe icon
         getString(R.string.like), //activeLabel: OPTIONAL active swipe label
-        getDrawable(R.drawable.ic_like_accept_24),//acceptIcon: OPTIONAL accept icon used when swipe move is enough to be accepted
-        getString(R.string.like_accept),//acceptLabel: OPTIONAL accept label used when swipe move is enough to be accepted
-        getDrawable(R.drawable.ic_disabled_like_24)//inactiveIcon: OPTIONAL icon used when this swipe is inactive or in queue
+        getDrawable(R.drawable.ic_like_accept_24),//acceptIcon: OPTIONAL accept icon used when swipe displacement is greater than "accept boundary"
+        getString(R.string.like_accept),//acceptLabel: OPTIONAL accept label used when swipe swipe displacement is greater than "accept boundary"
+        getDrawable(R.drawable.ic_disabled_like_24)//inactiveIcon: OPTIONAL icon used when this swipe could be next swipe
     )
 
 // Create other swipes (shareSwipe, copySwipe, ...) in a similar way.
 
-// If row has left swipes create left swipe list in the desired order
+// If row has left swipes, create left swipe list in the desired order like below:
 mLeftSwipeList = new LeftSwipeList(shareSwipe, copySwipe, cutSwipe);
-// If row has right swipes create right swipe list in the desired order
+// If row has right swipes, create right swipe list in the desired order like below:
 mRightSwipeList = new RightSwipeList(likeSwipe, editSwipe, delSwipe);
 ```
+
+Swipe changes from active state to accept state. When swipe displacement is smaller than "accept boundary" swipe is in active state and when swipe displacement is greater than "accept boundary" swipe is in accept state. Each of these two states has its own theme, called activeTheme and acceptTheme. These themes consist of icon, label, background color, label color, ... and these themes could be customized separately.
+In above constructor you can select different icons and labels for active and accept themes. 
 
 ### Return swipe lists from `getLeftSwipeList` and `getRightSwipeList` of `ViewHolder` 
 
@@ -139,13 +144,13 @@ public RightSwipeList getRightSwipeList() {
 ```
 
 ### At `onSwipeDone` of `ViewHolder` handle swipe event
-Now you have implemented `getLeftSwipeList` and `getRightSwipeList` of `MultiSwipe` interface in `ViewHolder` and you need to implement `onSwipeDone` of it. 
+Now you have implemented `getLeftSwipeList` and `getRightSwipeList` of `MultiSwipe` interface in `ViewHolder` and you must implement `onSwipeDone` of it. 
 Once swipe is done `onSwipeDone` will be called with `swipeId`. `onSwipeDone` is the method that we should do the `swipeId` action or return a value to do the action at activity or fragment. You can handle swipes here and/or return an optional value from this method that will be sent to an optional swipe listener in activity or fragment.
 ```java
 @Nullable
 @Override
 public Object onSwipeDone(int swipeId) {
-    // Here handle swipe event and return some data to MultiSwipeListener
+    // Here handle swipe event and/or return some data to MultiSwipeListener
     // Instead you may choose to only return data
     // from this method to consume event at Activity or Fragment
     switch (swipeId) {
@@ -166,6 +171,9 @@ public Object onSwipeDone(int swipeId) {
 This is the last step to setup this library.
 
 ```java
+import static com.github.ygngy.multiswipe.MultiSwipeAdapterKt.multiSwiping; // importing static method
+
+// in onCreate of Activity or Fragment:
 multiSwiping(recyclerView, new MultiSwipeListener() { // OPTIONAL listener
         // This method is called after onSwipeDone of ViewHolder
         // and data is the returned value of onSwipeDone of ViewHolder
@@ -185,8 +193,14 @@ multiSwiping(recyclerView, new MultiSwipeListener() { // OPTIONAL listener
             }
         }
 
-        // This method could be used to clear on screen widgets such as FABs
-        // direction may be START, END, NONE
+        /*** 
+            This method will be called when direction changes in each swipe. 
+            This method could be used to hide on screen widgets such as FABs. 
+            direction may be: 
+                - START (when user opens start side of view), 
+                - END (when user opens end side of view), 
+                - NONE (when swipe is closing without user interaction)
+        ***/
         @Override
         public void swiping(@NotNull SwipeDirection direction, int swipeListSize) {
             // here i hide FAB when user is swiping end side actively
@@ -195,19 +209,20 @@ multiSwiping(recyclerView, new MultiSwipeListener() { // OPTIONAL listener
         }
     });
 ```
+In `multiSwiping` method only `RecyclerView` argument is mandatory all other arguments are optional.
 
 There is more overloads for `multiSwiping` method with more optional arguments:
 -	`listener`: An optional listener (`MultiSwipeListener`) to handle swipe events. 
 -	`supportsRtl`: Is an optional Boolean argument and if it is **true** and layout direction is **RTL** then **left** swipe list will be used at **right** side and **right** list at **left** side of each row. Default value for this argument is **false** meaning left list is always on left side and right list is always on right side.
--	`hideInactiveIcons`: Is an optional Boolean argument and if it is true when swipe move is enough to be accepted, inactive icons will be hidden. Default value for this argument is true.
--	`swipeThreshold`: Is an optional `float` argument and is the fraction that the user should move the `view` to be considered as complete swipe. The fraction is calculated with respect to the view's bounds. Default value is .5f, which means, to swipe a `view`, user must move the `view` at least half of the `view`'s width. This value must be between 0 and 1. Default value is .5F.
+-	`hideInactiveIcons`: Is an optional Boolean argument and if it is true when swipe displacement is greater than "accept boundary", inactive icons will be hidden. Default value for this argument is true.
+-	`swipeThreshold`: Determines "accept boundary" and is an optional `float` argument which is the fraction that the user should move the `view` to be considered as acceptable swipe. The fraction is calculated with respect to the view's bounds. Default value is .5f, which means, to swipe a `view`, user must move the `view` at least half of the `view`'s width. This value must be between 0 and 1. Default value is .5F.
 -	`drawer`: Used to draw backgrounds, icons and labels for swipes. To change draws, use a custom subclass of `SwipeDrawerImpl` or implementation of `SwipeDrawer`. This argument should be used only in advanced situations where you need to override swipe draw events or draw something between drawing of background, icon, label and view. There is **no** need to use this argument just to change colors and icons. At next section I will show you how change colors and icons easily **without** using `drawer`. 
 
 
 
 Listener argument in `multiswiping` function is an object implementing interface: `MultiSwipeListener`. This interface has two methods: `onSwipeDone` and `swiping`.
--	`onSwipeDone` method of this interface is the last place to handle swipe action. when swipe is done `onSwipeDone` of `MultiSwipeListener` is called after `onSwipeDone` method of `ViewHolder`. This method receives swipe id and any object returned from `onSwipeDone` of `ViewHolder`. If you wonder that there is no `onSwipeDone` in `ViewHolder`, remember that `ViewHolder` must implement `MultiSwipe` interface which has `onSwipeDone` method.
--	`multiswiping` method is called when user swipes (moves) view. This method has two arguments, `SwipeDirection` which specifies swipe state and is an enum and may be `START` for swipe at view’s start side, `END` for swipe at view’s end side or `NONE` for swipe closing. Second argument is `swipeListSize` which specifies the number of available swipes in that side and dictates the number of swipe icons and required vision space in that side. In this method you may hide some on screen views such as FABs or Floating Action Buttons that are covering swipe icons.
+-	`onSwipeDone` method of this interface is the last place to handle swipe action. when swipe is done `onSwipeDone` of `MultiSwipeListener` is called after `onSwipeDone` method of `ViewHolder`. This method receives swipe id and any object returned from `onSwipeDone` of `ViewHolder`. Remember that `ViewHolder` must implement `MultiSwipe` interface which has `onSwipeDone` method.
+-	`swiping` method is called when user swipes (moves) view. This method has two arguments, `SwipeDirection` which specifies swipe state and is an enum and may be `START` when user opens view’s start side, `END` when user opens view’s end side or `NONE` for swipe closing without user interaction. Second argument is `swipeListSize` which specifies the number of available swipes in that side and dictates the number of swipe icons and required vision space in that side. In this method you may hide some on screen views such as FABs or Floating Action Buttons that are covering swipe icons.
 
 At this point all setups are done however if you want to customize backgrounds, color of labels, label size or margins read next section.
 
@@ -222,27 +237,30 @@ The simplest way to create swipe is the constructor that only needs icons and la
 // Each swipe contains of at least an id and an icon
 likeSwipe = new Swipe(
         context, //context: context used to extract default colors and margins from resources
-        SWIPE_TO_LIKE_ID, //id: swipe id will be sent to onSwipeDone when swipe is accepted
+        SWIPE_TO_LIKE_ID, //id: swipe id will be sent to onSwipeDone when swipe is completed
         getDrawable(R.drawable.ic_like_24), //activeIcon: swipe icon
         getString(R.string.like), //activeLabel: OPTIONAL swipe label
-        getDrawable(R.drawable.ic_like_accept_24),//acceptIcon: OPTIONAL icon used when swipe move is enough to be accepted
-        getString(R.string.like_accept),//acceptLabel: OPTIONAL label used when swipe move is enough to be accepted
-        getDrawable(R.drawable.ic_disabled_like_24)//inactiveIcon: OPTIONAL icon used when this swipe is inactive or in a queue
+        getDrawable(R.drawable.ic_like_accept_24),//acceptIcon: OPTIONAL icon used when swipe displacement is greater than "accept boundary"
+        getString(R.string.like_accept),//acceptLabel: OPTIONAL label used when swipe displacement is greater than "accept boundary"
+        getDrawable(R.drawable.ic_disabled_like_24)//inactiveIcon: OPTIONAL icon used when this swipe could be next swipe
     )
-//also overloaded constructor without optional arguments could be used
+//also overloaded constructors without optional arguments could be used
 ```
-But if you want to customize colors or margins you need to use another `Swipe` constructor instead of above constructor. This constructor needs two swipe themes instead of icon for two states of swipe:
+But if you want to customize colors or margins you need to use another `Swipe` constructor instead of above constructor. This constructor needs two swipe themes (instead of icon and label) for two states of swipe:
 
 ```java
 // Each swipe contains of at least an id and a theme and optionally acceptTheme and inactiveIcon
 shareSwipe = new Swipe (
        SWIPE_TO_SHARE_ID,//id: swipe id will be sent to onSwipeDone
        shareTheme,//activeTheme: theme used when user is interacting with this swipe
-       shareAcceptTheme,//acceptTheme: OPTIONAL accept theme (default is same as activeTheme)
-       getDrawable(R.drawable.ic_disabled_share_24)//inactiveIcon: OPTIONAL icon used when this swipe is inactive or in a queue
+       shareAcceptTheme,//acceptTheme: OPTIONAL accept theme (default is same as activeTheme). Is used when swipe displacement is greater than "accept boundary"
+       getDrawable(R.drawable.ic_disabled_share_24)//inactiveIcon: OPTIONAL icon used when this swipe could be next swipe
 )
-//also overloaded constructor without optional arguments could be used
+//also overloaded constructors without optional arguments could be used
 ```
+Swipe changes from active state to accept state. When swipe displacement is smaller than "accept boundary" swipe is in active state and when swipe displacement is greater than "accept boundary" swipe is in accept state. Each of these two states has its own `SwipeTheme`, called **activeTheme** and **acceptTheme** in the code above. These themes consist of icon, label, background color, label color, ... and these themes could be customized separately.
+
+
 To use this constructor, you need to create objects of type `SwipeTheme`. The `SwipeTheme` has two constructors if you do **NOT** need to customize label **size** or **margins** you can use following constructor: 
 
 ```java
@@ -253,12 +271,12 @@ SwipeTheme (
         boolean isAcceptTheme, // used to select default colors for label and backgrounds (default value is false)
         int labelColor, // color used to draw label (if isAcceptTheme is true default is pale red otherwise default is pale green)
         int backgroundColor, // color used to draw background below icon and label (if isAcceptTheme is true default is red otherwise default is green)
-        int viewColor // color used to draw view background (in day theme of Android if isAcceptTheme is true default is pale red otherwise is pale green. in night theme of Android view background may be gray or black)
+        int viewColor // color used to draw view background (in day theme of Android, if isAcceptTheme is true default is pale red otherwise is pale green. in night theme of Android, view background may be gray or black)
 )
-//also overloaded constructor without optional arguments could be used
+//also overloaded constructors without optional arguments could be used
 ```
 
-If you specify all color arguments of this constructor then no default color will be used thus `isAcceptTheme` argument value has no effect. But if you do not specify a color argument in this constructor `isAcceptTheme` distinguishes default color for that.
+If you specify all color arguments of this constructor then no default color will be used thus `isAcceptTheme` argument becomes ineffective. But if you do not specify a color argument in this constructor `isAcceptTheme` distinguishes default color for that.
 
 If you do not need to customize labels size or margins between icons and labels then you can skip to next section. Below classes is only needed for customizing text size and margins between text and icons. 
 
@@ -271,7 +289,7 @@ SwipeTheme (
        int backgroundColor, // will be drawn fully below icons and texts and rows of recyclerView (here default is transparent).
        int viewColor // view’s background which is above swipe icons and text (here default is transparent).
 )
-//also overloaded constructor without optional arguments could be used. in overloaded constructor colors are transparent and label is null
+//also overloaded constructors without optional arguments could be used. in overloaded constructors colors are transparent and label is null
 ```
 Usage:
 ```java
@@ -313,7 +331,7 @@ SwipeLabel shareLabel = new SwipeLabel(
 You can use following constructor to customize margins between icons:
 ```java
 SwipeIcon (
-      Drawable drawable, // drawable will be drawn as active swipe icon.
+      Drawable drawable, // drawable will be drawn as swipe icon.
       float edgeHorMargin, // horizontal margin between this active icon and edge of view.
       float iconHorMargin, // horizontal margin between this active icon and first inactive icon (if there is any other icons).
       float tailHorMargin // horizontal margin between inactive icons when this icon is active and there is more than one inactive icon.
@@ -338,8 +356,8 @@ SwipeIcon shareIcon = new SwipeIcon(
 The recycler view may have many rows and many rows may have similar swipe actions. Instead of repeatedly creating swipes for every row, you should create each swipe type once and reuse it in all rows. You can create a special factory class that creates all swipes in constructor and exposes them as class property like [this](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/SwipeCreator.kt) and [this](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/DefaultSwipeCreator.kt) then create only one instance of this class at recyclerview [adapter](https://github.com/ygngy/multiswipe/blob/main/demo/src/main/java/com/github/ygngy/demo/swipesample/RecyclerDemoAdapter.kt) as in demo app.
 
 - Do not create any object in `getLeftSwipeList` and `getRightSwipeList` of `MultiSwipe`
-As previously said `ViewHolder` must implement `MultiSwipe` interface and get swipe lists in `getLeftSwipeList` and `getRightSwipeList` methods. But these methods may be called repeatedly in each swipe so you should not create any object in these methods. Because if you create objects in these methods, extra objects will be created in memory. Also creating objects in these methods may slows down swipe animations because creating objects may be time consuming.
-So where create swipes? Answer: If your swipes are repetitive in rows then best location for creating swipes is in adapter of recyclerView  because it will be created once. But if your swipes are not similar in rows and swipe actions and themes are very dependent to the content of the row then best location to create swipes is in bind method of ViewHolder.
+As previously said `ViewHolder` must implement `MultiSwipe` interface and get swipe lists in `getLeftSwipeList` and `getRightSwipeList` methods. But these properties will be called **every time** a swipe starts or when swipe direction changes, so you should not create any object in these methods. Because if you create objects in these methods, extra objects will be created in memory. Also creating objects in these methods may slows down swipe animations because creating objects may be time consuming.
+If your swipes are repetitive in rows then best location for creating swipes is in adapter of recyclerView  because it will be created once. But if your swipes are not similar in rows and swipe actions and themes are very dependent to the content of the row then best location to create swipes is in bind method of ViewHolder.
 
 
 ## Credits
@@ -350,6 +368,6 @@ My Github Profile: [https://github.com/ygngy](https://github.com/ygngy)
 
 ## Copyright and License
 
-### Copyright (c) 2021 "Mohamadreza Amani Yeganegi"  
+### Copyright © 2022 "Mohamadreza Amani Yeganegi"  
 
 Licensed under the [MIT license](LICENSE)
