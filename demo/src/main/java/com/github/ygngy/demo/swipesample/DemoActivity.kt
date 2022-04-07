@@ -8,12 +8,13 @@
 
 package com.github.ygngy.demo.swipesample
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ShareCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -32,12 +33,36 @@ class DemoActivity : AppCompatActivity() {
 
     companion object{
         private const val EXTRA_DETAIL_ACTIVITY = "com.github.ygngy.demo.swipesample.DETAIL_ACTIVITY"
+        private const val KEY_PREF_SHOW_TOP_VIEW = "top_view"
+        private const val KEY_PREF_SHOW_BOTTOM_VIEW = "bottom_view"
     }
 
     private var isDetailActivity = false
     private lateinit var fab: FloatingActionButton
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemsList: MutableList<ListItem>
+    private lateinit var preference: SharedPreferences
+    // for testing top and bottom views effect on swipe icons position
+    private lateinit var topTv: TextView
+    private lateinit var bottomTv: TextView
+
+    private fun testViewVisibility(toggleTop: Boolean = false,
+                                   toggleBottom: Boolean = false){
+        var topVisible = preference.getBoolean(KEY_PREF_SHOW_TOP_VIEW, true)
+        if (toggleTop){
+            topVisible = !topVisible
+            preference.edit().putBoolean(KEY_PREF_SHOW_TOP_VIEW, topVisible).apply()
+        }
+        topTv.visibility = if (topVisible) View.VISIBLE else View.GONE
+
+        var bottomVisible = preference.getBoolean(KEY_PREF_SHOW_BOTTOM_VIEW, false)
+        if (toggleBottom){
+            bottomVisible = !bottomVisible
+            preference.edit().putBoolean(KEY_PREF_SHOW_BOTTOM_VIEW, bottomVisible).apply()
+        }
+        bottomTv.visibility = if (bottomVisible) View.VISIBLE else View.GONE
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +71,12 @@ class DemoActivity : AppCompatActivity() {
         isDetailActivity = intent.getBooleanExtra(EXTRA_DETAIL_ACTIVITY, false)
         // having two sample lists each activity uses one of them
         itemsList = (if (isDetailActivity) demoDetailList else demoList).toMutableList()
+
+        preference = getPreferences(Context.MODE_PRIVATE)
+        topTv = findViewById(R.id.topAboutLabel)
+        bottomTv = findViewById(R.id.bottomAboutLabel)
+        testViewVisibility()
+
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerView).apply {
             layoutManager = LinearLayoutManager(this@DemoActivity)
@@ -134,5 +165,25 @@ class DemoActivity : AppCompatActivity() {
             item.data += edited
             recyclerView.adapter?.notifyItemChanged(holder.adapterPosition)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_top_view -> {
+                testViewVisibility(toggleTop = true)
+                return true
+            }
+            R.id.action_bottom_view -> {
+                testViewVisibility(toggleBottom = true)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

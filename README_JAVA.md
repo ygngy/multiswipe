@@ -54,7 +54,7 @@ If you are using Maven build system use these steps to add multiswipe library to
     <dependency>
         <groupId>com.github.ygngy</groupId>
         <artifactId>multiswipe</artifactId>
-        <version>1.2.1</version>
+        <version>1.2.2</version>
     </dependency>
     ```
 
@@ -75,7 +75,7 @@ If you are using Gradle build system use these steps to add multiswipe library t
 
     ```groovy
     dependencies {
-        implementation 'com.github.ygngy:multiswipe:1.2.1'
+        implementation 'com.github.ygngy:multiswipe:1.2.2'
     }
     ```
 
@@ -363,7 +363,8 @@ If your swipes are repetitive in rows then best location for creating swipes is 
 ## Credits
 
 Creator: **"Mohamadreza Amani Yeganegi"**  
-My Email: [ygnegy@gmail.com](mailto:ygnegy@gmail.com)  
+My Email: [ygnegy@gmail.com](mailto:ygnegy@gmail.com)
+Email: [help4usr@gmail.com](mailto:help4usr@gmail.com)  
 My Github Profile: [https://github.com/ygngy](https://github.com/ygngy)  
 
 ## Copyright and License

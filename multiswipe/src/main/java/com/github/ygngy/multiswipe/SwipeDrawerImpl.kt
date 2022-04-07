@@ -80,8 +80,8 @@ open class SwipeDrawerImpl: SwipeDrawer {
         this.rowTop = viewHolder.itemView.top.toFloat()
         this.rowBottom = viewHolder.itemView.bottom.toFloat()
         this.xPos = (if (dX < 0) viewHolder.itemView.right else viewHolder.itemView.left).toFloat()
-        val visionTop = max(viewHolder.itemView.top, recyclerView.top)
-        val visionBottom = min(viewHolder.itemView.bottom, recyclerView.bottom)
+        val visionTop = max(viewHolder.itemView.top, 0)
+        val visionBottom = min(viewHolder.itemView.bottom, recyclerView.height)
         this.visionHeight = abs(visionBottom - visionTop)
         this.yCenter = (visionTop + visionBottom) / 2f
     }

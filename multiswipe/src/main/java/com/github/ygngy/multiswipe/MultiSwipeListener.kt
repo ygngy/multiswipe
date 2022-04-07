@@ -40,12 +40,17 @@ enum class SwipeDirection {
 interface MultiSwipeListener {
 
     /**
-     * This method could be used to clear on screen widgets such as FABs while swiping.
-     * This method may be called a lot in each swipe as a result of [direction] change.
+     * This method will be called when swipe direction changes in each swipe.
+     * This method could be used to hide on screen widgets such as FABs while swiping.
+     * **Caution:** This method may be called a lot in each swipe as a result of swipe [direction] change.
      *
      * @param direction Layout side ([START][SwipeDirection.START]/[END][SwipeDirection.END])
-     * of the row where swipe was started from or [NONE][SwipeDirection.NONE]
+     * of the view where swipe was started from or [NONE][SwipeDirection.NONE]
      * if swipe is closing or no swipe is active.
+     * direction may be:
+     *  - [START][SwipeDirection.START] (when user opens start side of the view),
+     *  - [END][SwipeDirection.END] (when user opens end side of the view),
+     *  - [NONE][SwipeDirection.NONE] (when swipe is closing without user interaction)
      * @param swipeListSize Number of available swipes in current direction.
      */
     fun swiping(direction: SwipeDirection, swipeListSize: Int)

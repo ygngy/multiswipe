@@ -15,4 +15,8 @@
     <string name="edit_label">Edit</string>
     <string name="del_label">Delete</string>
 
+    <string name="show_top_view">Show/Hide Top View</string>
+    <string name="show_bottom_view">Show/Hide Bottom View</string>
+
+    <string name="about">Library: MultiSwipe\n\nProgrammer: Mohamadreza Amani\nSupport: help4usr@gmail.com</string>
 </resources>
