@@ -4,7 +4,7 @@ A swipe library for RecyclerView in Android.
 
 ## Table of Contents (Kotlin) [Java](README_JAVA.md)
 
-- [Demo](#demo)
+- [UX](#UX)
 - [Requirements](#requirements)
 - [Setup in Maven](#setup-in-maven)
 - [Setup in Gradle](#setup-in-gradle)
@@ -12,9 +12,9 @@ A swipe library for RecyclerView in Android.
 - [Credits](#credits)
 - [Copyright and License](#copyright-and-license)
 
-## Demo
+## UX
 
-In the image below, you can see a demo app that uses this library:
+In the image below, you can see an app that uses this library:
 
 ![Multiswipe](screenshots/multiswipe.gif "Multiswipe in action")
 
