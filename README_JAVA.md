@@ -363,9 +363,12 @@ If your swipes are repetitive in rows then best location for creating swipes is 
 ## Credits
 
 Creator: **"Mohamadreza Amani Yeganegi"**  
-My Email: [ygnegy@gmail.com](mailto:ygnegy@gmail.com)
-Email: [help4usr@gmail.com](mailto:help4usr@gmail.com)  
+
+My LinkedIn Profile: [https://www.linkedin.com/in/mohamadreza-amani-b2201176](https://www.linkedin.com/in/mohamadreza-amani-b2201176)
+
 My Github Profile: [https://github.com/ygngy](https://github.com/ygngy)  
+
+My Email: [ygnegy@gmail.com](mailto:ygnegy@gmail.com)  ,  [help4usr@gmail.com](mailto:help4usr@gmail.com)
 
 ## Copyright and License
 
