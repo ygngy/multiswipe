@@ -378,6 +378,6 @@ My Email: [ygnegy@gmail.com](mailto:ygnegy@gmail.com)  ,  [help4usr@gmail.com](m
 
 ## Copyright and License
 
-### Copyright © 2022 "Mohamadreza Amani Yeganegi"  
+### Copyright © 2023 "Mohamadreza Amani Yeganegi"  
 
 Licensed under the [MIT license](LICENSE)
