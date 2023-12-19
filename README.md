@@ -2,6 +2,16 @@
 
 A swipe library for RecyclerView in Android.
 
+# Important Notice: Transition to Jetpack Compose
+
+Thank you for using Multiswipe. I want to inform you that with the introduction of Android Jetpack Compose, I have decided not to continue updating this library. Jetpack Compose offers a modern and more flexible approach to UI development, and I encourage you to explore its features for your projects.
+
+As a result, this library will no longer receive updates or maintenance. I appreciate your understanding and support.
+
+Feel free to fork this repository and adapt the code as needed for your specific use cases. 
+
+Thank you for using Multiswipe library.
+
 ## Table of Contents (Kotlin) [Java](README_JAVA.md)
 
 - [UX](#UX)
